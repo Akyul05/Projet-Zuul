@@ -1,0 +1,29 @@
+# --- Fichiers BlueJ/Java à ignorer ---
+
+# Fichiers compilés (bytecode)
+*.class
+
+# Fichiers BlueJ internes (contextes compilés)
+*.ctxt
+
+# Fichiers temporaires ou de sauvegarde
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Dossiers de sauvegarde BlueJ
+bluej.pkg
+bluej.debug
+
+# Dossier bin (si jamais tu compiles manuellement)
+bin/
+out/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Configuration IDE (au cas où tu ouvres aussi le projet avec VSCode ou Eclipse)
+.vscode/
+.idea/

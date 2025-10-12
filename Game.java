@@ -28,6 +28,27 @@ public class Game
         }
     }
     
+    private void printLocationInfo(){
+        System.out.println("Vous etes " +this.aCurrentRoom.getDescription());
+        System.out.println("Sorties: ");
+        if (this.aCurrentRoom.aNorthExit != null)
+            {
+                System.out.println("North");
+            }
+        if (this.aCurrentRoom.aSouthExit != null)
+            {
+                System.out.println("South");
+            }
+        if (this.aCurrentRoom.aEastExit != null)
+            {
+                System.out.println("East");
+            }
+        if (this.aCurrentRoom.aWestExit != null)
+            {
+                System.out.println("West");
+            }
+    }
+    
     private void createRooms()
     {
         Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.");
@@ -58,19 +79,19 @@ public class Game
         //vDirection : recupere le deuxieme mot qui correspond 
         //a ce qu'on a placé en parametre de goRoom
         
-        if (vDirection.equals("North"))
+        if (vDirection.equals("north"))
         {
             vNextRoom = this.aCurrentRoom.aNorthExit; 
         }
-        else if (vDirection.equals("South"))
+        else if (vDirection.equals("south"))
         {
             vNextRoom = this.aCurrentRoom.aSouthExit;
         }
-        else if(vDirection.equals("East"))
+        else if(vDirection.equals("east"))
         {
             vNextRoom = this.aCurrentRoom.aEastExit;
         }
-        else if(vDirection.equals("West"))
+        else if(vDirection.equals("west"))
         {
             vNextRoom = this.aCurrentRoom.aWestExit;
         }
@@ -91,25 +112,8 @@ public class Game
         else 
         {
             this.aCurrentRoom = vNextRoom; 
-            System.out.println("current room :"+ this.aCurrentRoom.getDescription() );
-            System.out.println("Exits : ");
+            this.printLocationInfo();
             
-            if (this.aCurrentRoom.aNorthExit != null)
-            {
-                System.out.println("North");
-            }
-            if (this.aCurrentRoom.aSouthExit != null)
-            {
-                System.out.println("South");
-            }
-            if (this.aCurrentRoom.aEastExit != null)
-            {
-                System.out.println("East");
-            }
-            if (this.aCurrentRoom.aWestExit != null)
-            {
-                System.out.println("West");
-            }
         }
         
         
@@ -120,8 +124,7 @@ public class Game
         System.out.println("Welcome to the World of Zuul!");
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
-        System.out.println("You are " + this.aCurrentRoom.getDescription());
-        System.out.println(this.aCurrentRoom.getExitsString());
+        this.printLocationInfo();
     }
     
     private void printHelp()

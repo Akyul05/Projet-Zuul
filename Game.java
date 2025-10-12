@@ -30,19 +30,19 @@ public class Game
     
     private void createRooms()
     {
-        Room vOutside = new Room("outside the main entrance of the university");
-        Room vTheater = new Room("in a lecture theatre");
-        Room vPub = new Room("in the campus pub");
-        Room vLab = new Room("in a computing lab");
-        Room vOffice = new Room("in the computing admin office");
+        Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.");
+        Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.");
+        Room vRuines = new Room("au cœur des Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.");
+        Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.");
+        Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.");
         
-        vOutside.setExits(null,vLab,vTheater,vPub);
-        vTheater.setExits(null,null,null, vOutside);
-        vPub.setExits(null,null,vOutside,null);
-        vLab.setExits(vOutside,null,vOffice,null);
-        vOffice.setExits(null,null,null,vLab);
+        vVillage.setExits(null,vForet,null,null);
+        vForet.setExits(vVillage,vRuines,null,null);
+        vRuines.setExits(null,null,null,vForet);
+        vSanctuaire.setExits(vForet,vForge,null,null);
+        vForge.setExits(vSanctuaire,null,null,null);
         
-        this.aCurrentRoom = vOutside;
+        this.aCurrentRoom = vVillage;
     }
     private void goRoom(final Command pSecondWord)
     {

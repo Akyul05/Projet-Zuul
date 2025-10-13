@@ -74,33 +74,8 @@ public class Game
         }
         
         //b)
-        Room vNextRoom = null;
         String vDirection = pSecondWord.getSecondWord(); 
-        //vDirection : recupere le deuxieme mot qui correspond 
-        //a ce qu'on a placé en parametre de goRoom
-        
-        if (vDirection.equals("north"))
-        {
-            vNextRoom = this.aCurrentRoom.aNorthExit; 
-        }
-        else if (vDirection.equals("south"))
-        {
-            vNextRoom = this.aCurrentRoom.aSouthExit;
-        }
-        else if(vDirection.equals("east"))
-        {
-            vNextRoom = this.aCurrentRoom.aEastExit;
-        }
-        else if(vDirection.equals("west"))
-        {
-            vNextRoom = this.aCurrentRoom.aWestExit;
-        }
-        else 
-        {
-            System.out.println("Unknown direction ! !");
-            return;
-        }
-        
+        Room vNextRoom = this.aCurrentRoom.getExit(vDirection);
         //c)
         
         if (vNextRoom == null)

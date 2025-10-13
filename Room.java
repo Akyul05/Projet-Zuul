@@ -30,6 +30,24 @@ public class Room
         this.aWestExit=pWestExit;
     }//setExits
     
+    public Room getExit(String pDirection){
+        if(pDirection.equals("north")){
+            return aNorthExit;
+        }
+        if(pDirection.equals("south")){
+            return aSouthExit;
+        }
+        if(pDirection.equals("east")){
+            return aEastExit;
+        }
+        if(pDirection.equals("west")){
+            return aWestExit;
+        }
+        
+        return null;
+        
+    }
+    
     public String getExitsString()
     {
         String vExits = "Exits : ";

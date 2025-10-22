@@ -1,4 +1,5 @@
- 
+import java.util.Set;
+import java.util.HashMap;
 /**
  * Classe Room - un lieu du jeu d'aventure Zuul.
  *
@@ -7,14 +8,12 @@
 public class Room
 {
     private String aDescription; 
-    private Room aNorthExit; 
-    private Room aSouthExit;
-    private Room aEastExit;
-    private Room aWestExit;
+    private HashMap<String, Room > aExits;
     
     public Room(final String pDescription)
     {
         this.aDescription = pDescription;
+        aExits= new HashMap<String, Room>();
         
     }
     public String getDescription()
@@ -22,46 +21,21 @@ public class Room
         return this.aDescription;
         
     }//getDescription()
-    public void setExits(final Room pNorthExit,final Room pSouthExit,final Room pEastExit,final Room pWestExit)
+    public void setExit(String pDirection, Room pNeighbor)
     {
-        this.aNorthExit=pNorthExit;
-        this.aSouthExit=pSouthExit;
-        this.aEastExit=pEastExit;
-        this.aWestExit=pWestExit;
+        aExits.put(pDirection, pNeighbor);
     }//setExits
     
     public Room getExit(String pDirection){
-        if(pDirection.equals("north")){
-            return aNorthExit;
-        }
-        if(pDirection.equals("south")){
-            return aSouthExit;
-        }
-        if(pDirection.equals("east")){
-            return aEastExit;
-        }
-        if(pDirection.equals("west")){
-            return aWestExit;
-        }
-        
-        return null;
-        
+        return this.aExits.get(pDirection);
     }
     
     public String getExitsString()
     {
         String vExits = "Sorties: ";
-        if( this.aNorthExit!=null){
-            vExits= vExits + " North";
-        }
-        if( this.aSouthExit!=null){
-            vExits= vExits + " South";
-        }
-        if( this.aEastExit!=null){
-            vExits= vExits + " East";
-        }
-        if( this.aWestExit!=null){
-            vExits= vExits + " West";
+        Set<String> vKeys = this.aExits.keySet();
+        for(String vDirection : vKeys){
+            vExits += vDirection;
         }
         return vExits;
         

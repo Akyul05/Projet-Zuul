@@ -37,7 +37,7 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "vous etes" + aDescription +".\n" + getExitString();
+        return "vous etes " + aDescription +".\n" + getExitString();
     }
     /**
      * Définit une sortie pour cette pièce.

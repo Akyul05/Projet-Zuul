@@ -116,7 +116,7 @@ public class Game
         System.out.println("You wander around at the university.");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        System.out.println("  look go quit help");
         
     }// printHelp()
     /**
@@ -134,6 +134,10 @@ public class Game
         else
         return true;
     }// quit()
+    private void look()
+    {
+        System.out.println(this.aCurrentRoom.getLongDescription());
+    }//look()
     /**
      * Verifie si la commande est connu et appele la methode qui correpond.
      * @param pCommand La commande.
@@ -159,6 +163,10 @@ public class Game
         else if (pCommand.getCommandWord().equals("quit"))
         {
             return quit(pCommand);
+        }
+        else if(pCommand.getCommandWord().equals("look")){
+            this.look();
+            return false;
         }
         
         else

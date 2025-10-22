@@ -65,4 +65,11 @@ public class Parser
             return new Command( null, null ); 
         }
     } // getCommand()
+    /**
+     * Affiche la liste des commandes valides.
+     */
+    public void showCommands()
+    {
+     this.aValidCommands.showAll();
+    }//showCommand()
 } // Parser

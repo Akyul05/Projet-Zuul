@@ -115,8 +115,8 @@ public class Game
         System.out.println("Your are lost. You are alone.");
         System.out.println("You wander around at the university.");
         System.out.println();
-        System.out.println("Your command words are:");
-        System.out.println("  look go quit help");
+        System.out.println("Vos commandes sont: ");
+        this.aParser.showCommands();
         
     }// printHelp()
     /**
@@ -138,6 +138,10 @@ public class Game
     {
         System.out.println(this.aCurrentRoom.getLongDescription());
     }//look()
+    private void eat()
+    {
+        System.out.println("vous avez mangé , vous êtes désormais rassasié");
+    }//eat()
     /**
      * Verifie si la commande est connu et appele la methode qui correpond.
      * @param pCommand La commande.
@@ -166,6 +170,10 @@ public class Game
         }
         else if(pCommand.getCommandWord().equals("look")){
             this.look();
+            return false;
+        }
+        else if(pCommand.getCommandWord().equals("eat")){
+            this.eat();
             return false;
         }
         

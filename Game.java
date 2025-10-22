@@ -30,23 +30,7 @@ public class Game
     
     private void printLocationInfo(){
         System.out.println("Vous etes " +this.aCurrentRoom.getDescription());
-        System.out.println("Sorties: ");
-        if (this.aCurrentRoom.aNorthExit != null)
-            {
-                System.out.println("North");
-            }
-        if (this.aCurrentRoom.aSouthExit != null)
-            {
-                System.out.println("South");
-            }
-        if (this.aCurrentRoom.aEastExit != null)
-            {
-                System.out.println("East");
-            }
-        if (this.aCurrentRoom.aWestExit != null)
-            {
-                System.out.println("West");
-            }
+        System.out.println(this.aCurrentRoom.getExitsString());
     }
     
     private void createRooms()

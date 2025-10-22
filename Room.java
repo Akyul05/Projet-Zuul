@@ -7,10 +7,10 @@
 public class Room
 {
     private String aDescription; 
-    public Room aNorthExit; 
-    public Room aSouthExit;
-    public Room aEastExit;
-    public Room aWestExit;
+    private Room aNorthExit; 
+    private Room aSouthExit;
+    private Room aEastExit;
+    private Room aWestExit;
     
     public Room(final String pDescription)
     {
@@ -50,7 +50,7 @@ public class Room
     
     public String getExitsString()
     {
-        String vExits = "Exits : ";
+        String vExits = "Sorties: ";
         if( this.aNorthExit!=null){
             vExits= vExits + " North";
         }

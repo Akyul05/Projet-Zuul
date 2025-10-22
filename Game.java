@@ -41,11 +41,17 @@ public class Game
         Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.");
         Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.");
         
-        vVillage.setExits(null,vForet,null,null);
-        vForet.setExits(vVillage,vRuines,null,null);
-        vRuines.setExits(null,null,null,vForet);
-        vSanctuaire.setExits(vForet,vForge,null,null);
-        vForge.setExits(vSanctuaire,null,null,null);
+        vVillage.setExit("south", vForet);
+        
+        vForet.setExit("north", vVillage);
+        vForet.setExit("south", vRuines);
+        
+        vRuines.setExit("west", vForet);
+        
+        vSanctuaire.setExit("north", vForet);
+        vSanctuaire.setExit("south", vForge);
+        
+        vForge.setExit("north", vSanctuaire);
         
         this.aCurrentRoom = vVillage;
     }

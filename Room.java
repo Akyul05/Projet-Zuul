@@ -35,7 +35,7 @@ public class Room
         String vExits = "Sorties: ";
         Set<String> vKeys = this.aExits.keySet();
         for(String vDirection : vKeys){
-            vExits += vDirection;
+            vExits += " " + vDirection;
         }
         return vExits;
         

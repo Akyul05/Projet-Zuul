@@ -68,8 +68,8 @@ public class Parser
     /**
      * Affiche la liste des commandes valides.
      */
-    public void showCommands()
+    public String getCommandList()
     {
-     this.aValidCommands.showAll();
+     return this.aValidCommands.getCommandList();
     }//showCommand()
 } // Parser

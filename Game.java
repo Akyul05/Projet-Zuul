@@ -116,7 +116,7 @@ public class Game
         System.out.println("You wander around at the university.");
         System.out.println();
         System.out.println("Vos commandes sont: ");
-        this.aParser.showCommands();
+        System.out.println(" "+this.aParser.getCommandList());
         
     }// printHelp()
     /**

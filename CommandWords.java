@@ -27,12 +27,13 @@ public class CommandWords
         this.aValidCommands[3] = "look";
         this.aValidCommands[4] = "eat";
     } // CommandWords()
-    public void showAll()
+    public String getCommandList()
     {
+        String vList = "";
         for(String vCommand : aValidCommands){
-            System.out.println(vCommand + " ");
+            vList += vCommand + "";
         }
-        System.out.println();
+        return vList; 
     }//showAll()
     /**
      * Check whether a given String is a valid command word. 

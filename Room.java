@@ -9,20 +9,26 @@ public class Room
 {
     private String aDescription; 
     private HashMap<String, Room > aExits;
+    private String aImageName;
     /**
      * Constructeur pour les objets de la classe Room.
      * Initialise la description et le HashMap des sorties.
      * @param pDescription La description de la pièce .
      */
-    public Room(final String pDescription)
+    public Room(final String pDescription, final String pImage)
     {
         this.aDescription = pDescription;
         aExits= new HashMap<String, Room>();
-        
+        this.aImageName=pImage;
     }//Room
+    public String getImageName()
+    {
+        return this.aImageName;
+    }
     /**
      * Accesseur pour la description d'une pièce.
      * @return Description de la pièce.
+     * @param pImage Le nom de l'image
      */
     public String getDescription()
     {

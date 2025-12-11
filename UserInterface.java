@@ -36,7 +36,6 @@ public class UserInterface implements ActionListener
     private JButton    aButtonWest;
     private JButton    aButtonLook;
     private JButton    aButtonHelp;
-    private JButton    aButtonQuit;
     /**
      * Construct a UserInterface. As a parameter, a Game Engine
      * (an object processing and executing the game commands) is
@@ -140,16 +139,12 @@ public class UserInterface implements ActionListener
         this.aButtonHelp = new JButton("Aide");
         this.aButtonHelp.addActionListener(this);
         
-        this.aButtonQuit = new JButton("Quitter");
-        this.aButtonQuit.addActionListener(this);
-        
         vButtons.add(this.aButtonNorth);
         vButtons.add(this.aButtonSouth);
         vButtons.add(this.aButtonEast);
         vButtons.add(this.aButtonWest);
         vButtons.add(this.aButtonLook);
         vButtons.add(this.aButtonHelp);
-        vButtons.add(this.aButtonQuit);
         
         
         JPanel vPanel = new JPanel();
@@ -202,8 +197,6 @@ public class UserInterface implements ActionListener
                 this.aEngine.interpretCommand("look");
             else if ( pE.getSource() == this.aButtonHelp )
                 this.aEngine.interpretCommand("help");
-            else if ( pE.getSource() == this.aButtonQuit )
-                this.aEngine.interpretCommand("quit");
         }
     } // actionPerformed(.)
 

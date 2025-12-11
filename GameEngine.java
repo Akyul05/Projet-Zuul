@@ -57,10 +57,10 @@ public class GameEngine
     {
         // Création des lieux avec des images (noms de fichiers temporaires)
         Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");
-        Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.jpg");
-        Room vRuines = new Room("au cœur des Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.jpg");
-        Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.jpg");
-        Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.jpg");
+        Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.png");
+        Room vRuines = new Room("au cœur des Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");
+        Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.png");
+        Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");
 
         // Initialisation des sorties
         vVillage.setExit("south", vForet);
@@ -74,7 +74,18 @@ public class GameEngine
         vSanctuaire.setExit("south", vForge);
         
         vForge.setExit("north", vSanctuaire);
+        // Initialisation des Items
+        Item vHerbes = new Item("des herbes médicinales luminescentes", 0.5);
+        vForet.setItem(vHerbes);
+       
+        Item vGemmeBleue = new Item("une gemme légendaire pulsant d'une lueur bleue", 1.0);
+        vRuines.setItem(vGemmeBleue);
 
+        Item vSocle = new Item("le socle sacré de l'épée des âmes", 50.0);
+        vForge.setItem(vSocle);
+
+        Item vLivre = new Item("un vieux livre poussiéreux laissé par l'Érudit", 1.2);
+        vVillage.setItem(vLivre);
         this.aCurrentRoom = vVillage; // Le jeu commence au village
     } // createRooms()
 

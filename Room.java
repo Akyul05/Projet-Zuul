@@ -10,6 +10,7 @@ public class Room
     private String aDescription; 
     private HashMap<String, Room > aExits;
     private String aImageName;
+    private Item aItem;
     /**
      * Constructeur pour les objets de la classe Room.
      * Initialise la description et le HashMap des sorties.
@@ -20,6 +21,7 @@ public class Room
         this.aDescription = pDescription;
         aExits= new HashMap<String, Room>();
         this.aImageName=pImage;
+        this.aItem= null;
     }//Room
     public String getImageName()
     {
@@ -43,7 +45,9 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "vous etes " + aDescription +".\n" + getExitString();
+        return "vous etes " + this.aDescription +".\n" +this.getItemString()+"\n"+
+        this.getExitString()
+        ;
     }
     /**
      * Définit une sortie pour cette pièce.
@@ -76,4 +80,24 @@ public class Room
         return vExits;
         
     }//getExitString()
+    
+    public void setItem(final Item pItem)
+    {
+        this.aItem = pItem;
+    }
+    
+    public Item getItem()
+    {
+        return this.aItem;
+    }
+    
+    public String getItemString()
+    {
+        if (this.aItem != null) {
+            return "Objet courant : " + this.aItem.getLongDescription();
+        }
+        else {
+            return "Pas d'objet ici.";
+        }
+    }
 } // Room

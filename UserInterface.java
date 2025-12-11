@@ -13,6 +13,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.awt.Image;
+import javax.swing.JButton;
+import java.awt.GridLayout;
+
 /**
  * This class implements a simple graphical user interface with a 
  * text entry area, a text output area and an optional image.
@@ -26,7 +29,14 @@ public class UserInterface implements ActionListener
     private JTextField aEntryField;
     private JTextArea  aLog;
     private JLabel     aImage;
-
+    
+    private JButton    aButtonNorth;
+    private JButton    aButtonSouth;
+    private JButton    aButtonEast;
+    private JButton    aButtonWest;
+    private JButton    aButtonLook;
+    private JButton    aButtonHelp;
+    private JButton    aButtonQuit;
     /**
      * Construct a UserInterface. As a parameter, a Game Engine
      * (an object processing and executing the game commands) is
@@ -70,7 +80,7 @@ public class UserInterface implements ActionListener
             ImageIcon vIcon = new ImageIcon( vImageURL );
             Image vImage = vIcon.getImage();
             // pour mettre l'image au bon format:
-            Image vImageFormate = vImage.getScaledInstance(800,600,Image.SCALE_SMOOTH);
+            Image vImageFormate = vImage.getScaledInstance(400,300,Image.SCALE_SMOOTH);
             vIcon = new ImageIcon(vImageFormate);
             this.aImage.setIcon( vIcon );
             this.aMyFrame.pack();
@@ -108,18 +118,51 @@ public class UserInterface implements ActionListener
         vListScroller.setMinimumSize( new Dimension(100,100) );
 
         this.aImage = new JLabel();
-
+        
+        JPanel vButtons = new JPanel();
+        vButtons.setLayout(new GridLayout(0,1));
+        
+        this.aButtonNorth = new JButton("Nord");
+        this.aButtonNorth.addActionListener(this);
+        
+        this.aButtonSouth = new JButton("Sud");
+        this.aButtonSouth.addActionListener(this);
+        
+        this.aButtonEast = new JButton("Est");
+        this.aButtonEast.addActionListener(this);
+        
+        this.aButtonWest = new JButton("Ouest");
+        this.aButtonWest.addActionListener(this);
+        
+        this.aButtonLook = new JButton("Regarder");
+        this.aButtonLook.addActionListener(this);
+        
+        this.aButtonHelp = new JButton("Aide");
+        this.aButtonHelp.addActionListener(this);
+        
+        this.aButtonQuit = new JButton("Quitter");
+        this.aButtonQuit.addActionListener(this);
+        
+        vButtons.add(this.aButtonNorth);
+        vButtons.add(this.aButtonSouth);
+        vButtons.add(this.aButtonEast);
+        vButtons.add(this.aButtonWest);
+        vButtons.add(this.aButtonLook);
+        vButtons.add(this.aButtonHelp);
+        vButtons.add(this.aButtonQuit);
+        
+        
         JPanel vPanel = new JPanel();
         vPanel.setLayout( new BorderLayout() ); // ==> only five places
         vPanel.add( this.aImage, BorderLayout.NORTH );
         vPanel.add( vListScroller, BorderLayout.CENTER );
         vPanel.add( this.aEntryField, BorderLayout.SOUTH );
-
+        vPanel.add( vButtons, BorderLayout.EAST );
         this.aMyFrame.getContentPane().add( vPanel, BorderLayout.CENTER );
 
         // add some event listeners to some components
         this.aEntryField.addActionListener( this );
-
+        
         // to end program when window is closed
         this.aMyFrame.addWindowListener(
             new WindowAdapter() { // anonymous class
@@ -132,6 +175,8 @@ public class UserInterface implements ActionListener
         this.aMyFrame.pack();
         this.aMyFrame.setVisible( true );
         this.aEntryField.requestFocus();
+        
+        
     } // createGUI()
 
     /**
@@ -141,7 +186,25 @@ public class UserInterface implements ActionListener
     {
         // no need to check the type of action at the moment
         // because there is only one possible action (text input) :
-        this.processCommand(); // never suppress this line
+        if (pE.getSource() == this.aEntryField){
+        this.processCommand();
+    }// never suppress this line
+    else {
+            if ( pE.getSource() == this.aButtonNorth )
+                this.aEngine.interpretCommand("go north");
+            else if ( pE.getSource() == this.aButtonSouth )
+                this.aEngine.interpretCommand("go south");
+            else if ( pE.getSource() == this.aButtonEast )
+                this.aEngine.interpretCommand("go east");
+            else if ( pE.getSource() == this.aButtonWest )
+                this.aEngine.interpretCommand("go west");
+            else if ( pE.getSource() == this.aButtonLook )
+                this.aEngine.interpretCommand("look");
+            else if ( pE.getSource() == this.aButtonHelp )
+                this.aEngine.interpretCommand("help");
+            else if ( pE.getSource() == this.aButtonQuit )
+                this.aEngine.interpretCommand("quit");
+        }
     } // actionPerformed(.)
 
     /**

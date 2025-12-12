@@ -1,5 +1,6 @@
 import java.util.Set;
 import java.util.HashMap;
+import java.util.Iterator;
 /**
  * Classe Room - un lieu du jeu d'aventure Zuul.
  *
@@ -10,7 +11,7 @@ public class Room
     private String aDescription; 
     private HashMap<String, Room > aExits;
     private String aImageName;
-    private Item aItem;
+    private HashMap< String , Item> aItems;
     /**
      * Constructeur pour les objets de la classe Room.
      * Initialise la description et le HashMap des sorties.
@@ -21,7 +22,7 @@ public class Room
         this.aDescription = pDescription;
         aExits= new HashMap<String, Room>();
         this.aImageName=pImage;
-        this.aItem= null;
+        this.aItems = new HashMap<String, Item>();
     }//Room
     public String getImageName()
     {
@@ -45,7 +46,8 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "vous etes " + this.aDescription +".\n" +this.getItemString()+"\n"+
+        return "vous etes " + this.aDescription +".\n" 
+        +this.getItemString()+"\n"+
         this.getExitString()
         ;
     }
@@ -81,23 +83,26 @@ public class Room
         
     }//getExitString()
     
-    public void setItem(final Item pItem)
+    public void addItem(final Item pItem)
     {
-        this.aItem = pItem;
+        this.aItems.put(pItem.getName(), pItem);
     }
     
-    public Item getItem()
+    public Item getItem(final String pName)
     {
-        return this.aItem;
+        return this.aItems.get(pName);
     }
     
     public String getItemString()
     {
-        if (this.aItem != null) {
-            return "Objet courant : " + this.aItem.getLongDescription();
-        }
-        else {
+        if (this.aItems.isEmpty()) {
             return "Pas d'objet ici.";
         }
+        String vReturnString = "Objets : ";
+        Set<String> vKeys = this.aItems.keySet();
+        for (String vItemName : vKeys){
+            vReturnString += " " +this.aItems.get(vItemName).getDescription();
+        }
+        return vReturnString;
     }
 } // Room

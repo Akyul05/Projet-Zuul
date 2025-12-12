@@ -9,11 +9,12 @@ public class Item
 {
     private String aDescription;
     private double aWeight;
-    
-    public Item( final String pDescription, final double pWeight)
+    private String aName;
+    public Item(  final String pName, final String pDescription, final double pWeight)
     {
         this.aDescription = pDescription;
-        this.aWeight      = pWeight;
+        this.aWeight = pWeight;
+        this.aName = pName;
     } // Item()
     
     public String getDescription()
@@ -29,5 +30,9 @@ public class Item
     public String getLongDescription()
     {
         return this.aDescription + " (Poids: " + this.aWeight + "kg)";
+    }
+    public String getName()
+    {
+        return this.aName;
     }
 }

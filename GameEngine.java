@@ -63,10 +63,11 @@ public class GameEngine
         Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");
 
         // Initialisation des sorties
-        vVillage.setExit("south", vForet);
+        vVillage.setExit("east", vForet);
         
-        vForet.setExit("north", vVillage);
-        vForet.setExit("south", vRuines);
+        vForet.setExit("west", vVillage);
+        vForet.setExit("east", vRuines);
+        vForet.setExit("south", vSanctuaire);
         
         vRuines.setExit("west", vForet);
         
@@ -75,17 +76,21 @@ public class GameEngine
         
         vForge.setExit("north", vSanctuaire);
         // Initialisation des Items
-        Item vHerbes = new Item("des herbes médicinales luminescentes", 0.5);
-        vForet.setItem(vHerbes);
-       
-        Item vGemmeBleue = new Item("une gemme légendaire pulsant d'une lueur bleue", 1.0);
-        vRuines.setItem(vGemmeBleue);
+        Item vHerbes = new Item("herbes", "des herbes médicinales luminescentes", 0.5);
+        vForet.addItem(vHerbes); 
 
-        Item vSocle = new Item("le socle sacré de l'épée des âmes", 50.0);
-        vForge.setItem(vSocle);
+        Item vGemmeBleue = new Item("gemme", "une gemme légendaire pulsant d'une lueur bleue", 1.0);
+        vRuines.addItem(vGemmeBleue);
 
-        Item vLivre = new Item("un vieux livre poussiéreux laissé par l'Érudit", 1.2);
-        vVillage.setItem(vLivre);
+        Item vSocle = new Item("socle", "le socle sacré de l'épée des âmes", 50.0);
+        vForge.addItem(vSocle);
+
+        Item vLivre = new Item("livre", "un vieux livre poussiéreux laissé par l'Érudit", 1.2);
+        vVillage.addItem(vLivre);
+        
+        Item vEpeeBrisee = new Item("epee", "une vieille épée d'entraînement brisée", 2.0);
+        vVillage.addItem(vEpeeBrisee);
+        
         this.aCurrentRoom = vVillage; // Le jeu commence au village
     } // createRooms()
 

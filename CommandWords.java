@@ -20,12 +20,13 @@ public class CommandWords
      */
     public CommandWords()
     {
-        this.aValidCommands = new String[5];
+        this.aValidCommands = new String[6];
         this.aValidCommands[0] = "go";
         this.aValidCommands[1] = "help";
         this.aValidCommands[2] = "quit";
         this.aValidCommands[3] = "look";
         this.aValidCommands[4] = "eat";
+        this.aValidCommands[4] = "back";
     } // CommandWords()
     public String getCommandList()
     {

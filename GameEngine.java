@@ -1,3 +1,4 @@
+import java.util.Stack;
 /**
  *  This class is part of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.
@@ -14,7 +15,7 @@ public class GameEngine
     private Parser        aParser;
     private Room          aCurrentRoom;
     private UserInterface aGui;
-
+    private Stack <Room> aPrevRooms;
     /**
      * Constructeur pour les objets de la classe GameEngine.
      * Crée le parseur et la carte du jeu.
@@ -23,6 +24,7 @@ public class GameEngine
     {
         this.aParser = new Parser();
         this.createRooms();
+        this.aPrevRooms = new Stack <Room>();
     } // GameEngine()
 
     /**
@@ -42,7 +44,7 @@ public class GameEngine
     private void printWelcome()
     {
         this.aGui.print( "\n" );
-        this.aGui.println( "Bienvenue dans 'Aelyndor : L'Épée des Âmes' !" );
+        this.aGui.println( "Bienvenue dans Aelyndor : L'Épée des Âmes !" );
         this.aGui.println( "Le royaume est en ruines. Retrouvez les gemmes, reforgez l'épée, sauvez le monde." );
         this.aGui.println( "Tapez 'help' si vous avez besoin d'aide." );
         this.aGui.print( "\n" );
@@ -57,16 +59,17 @@ public class GameEngine
     {
         // Création des lieux avec des images (noms de fichiers temporaires)
         Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");
-        Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.jpg");
-        Room vRuines = new Room("au cœur des Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.jpg");
-        Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.jpg");
-        Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.jpg");
+        Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.png");
+        Room vRuines = new Room("au cœur des Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");
+        Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.png");
+        Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");
 
         // Initialisation des sorties
-        vVillage.setExit("south", vForet);
+        vVillage.setExit("east", vForet);
         
-        vForet.setExit("north", vVillage);
-        vForet.setExit("south", vRuines);
+        vForet.setExit("west", vVillage);
+        vForet.setExit("east", vRuines);
+        vForet.setExit("south", vSanctuaire);
         
         vRuines.setExit("west", vForet);
         
@@ -74,7 +77,22 @@ public class GameEngine
         vSanctuaire.setExit("south", vForge);
         
         vForge.setExit("north", vSanctuaire);
+        // Initialisation des Items
+        Item vHerbes = new Item("herbes", "des herbes médicinales luminescentes", 0.5);
+        vForet.addItem(vHerbes); 
 
+        Item vGemmeBleue = new Item("gemme", "une gemme légendaire pulsant d'une lueur bleue", 1.0);
+        vRuines.addItem(vGemmeBleue);
+
+        Item vSocle = new Item("socle", "le socle sacré de l'épée des âmes", 50.0);
+        vForge.addItem(vSocle);
+
+        Item vLivre = new Item("livre", "un vieux livre poussiéreux laissé par l'Érudit", 1.2);
+        vVillage.addItem(vLivre);
+        
+        Item vEpeeBrisee = new Item("epee", "une vieille épée d'entraînement brisée", 2.0);
+        vVillage.addItem(vEpeeBrisee);
+        
         this.aCurrentRoom = vVillage; // Le jeu commence au village
     } // createRooms()
 
@@ -105,6 +123,9 @@ public class GameEngine
         }
         else if ( vCommandWord.equals( "eat" ) ) {
             this.eat();
+        }
+        else if (vCommandWord.equals("back")){
+            this.back();
         }
         else if ( vCommandWord.equals( "quit" ) ) {
             if ( vCommand.hasSecondWord() )
@@ -174,6 +195,7 @@ public class GameEngine
         else {
             this.aCurrentRoom = vNextRoom;
             this.printLocationInfo();
+            this.aPrevRooms.push(this.aCurrentRoom);
         }
     } // goRoom(.)
 
@@ -186,4 +208,13 @@ public class GameEngine
         this.aGui.enable( false ); // Désactive la zone de saisie
     } // endGame()
     
+    private void back()
+    {
+        if(this.aPrevRooms.isEmpty()){
+            this.aGui.println("retour en arrière impossible");
+        }
+        Room vPrevRoom = this.aPrevRooms.pop();
+        this.aCurrentRoom = vPrevRoom;
+        this.printLocationInfo();
+    }
 } // GameEngine

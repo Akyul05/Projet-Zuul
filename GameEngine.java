@@ -125,7 +125,7 @@ public class GameEngine
             this.eat();
         }
         else if (vCommandWord.equals("back")){
-            this.back();
+            this.back(vCommand);
         }
         else if ( vCommandWord.equals( "quit" ) ) {
             if ( vCommand.hasSecondWord() )
@@ -181,6 +181,7 @@ public class GameEngine
      */
     private void goRoom( final Command pCommand ) 
     {
+        
         if ( ! pCommand.hasSecondWord() ) {
             this.aGui.println( "Go where?" );
             return;
@@ -193,9 +194,9 @@ public class GameEngine
             this.aGui.println( "There is no door!" );
         }
         else {
+            this.aPrevRooms.push(this.aCurrentRoom);
             this.aCurrentRoom = vNextRoom;
             this.printLocationInfo();
-            this.aPrevRooms.push(this.aCurrentRoom);
         }
     } // goRoom(.)
 
@@ -208,10 +209,16 @@ public class GameEngine
         this.aGui.enable( false ); // Désactive la zone de saisie
     } // endGame()
     
-    private void back()
+    private void back(final Command pCommand)
     {
+        if (pCommand.hasSecondWord()){
+            this.aGui.println("back where?");
+            return;
+        }
         if(this.aPrevRooms.isEmpty()){
             this.aGui.println("retour en arrière impossible");
+            return ;
+            
         }
         Room vPrevRoom = this.aPrevRooms.pop();
         this.aCurrentRoom = vPrevRoom;

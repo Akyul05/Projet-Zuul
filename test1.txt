@@ -1,13 +1,14 @@
+go east
+go south
+go south
+go down
 look
-help
-eat
+go up
 look
 go east
-look
-go east
+go up
 look
 back
-look
-go west
-look
+back
+back
 quit

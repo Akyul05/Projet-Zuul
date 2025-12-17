@@ -30,12 +30,14 @@ public class UserInterface implements ActionListener
     private JTextArea  aLog;
     private JLabel     aImage;
     
-    private JButton    aButtonNorth;
-    private JButton    aButtonSouth;
-    private JButton    aButtonEast;
-    private JButton    aButtonWest;
-    private JButton    aButtonLook;
-    private JButton    aButtonBack;
+    private JButton aButtonNorth;
+    private JButton aButtonSouth;
+    private JButton aButtonEast;
+    private JButton aButtonWest;
+    private JButton aButtonLook;
+    private JButton aButtonBack;
+    private JButton aButtonUp;
+    private JButton aButtonDown;
     /**
      * Construct a UserInterface. As a parameter, a Game Engine
      * (an object processing and executing the game commands) is
@@ -133,8 +135,11 @@ public class UserInterface implements ActionListener
         this.aButtonWest = new JButton("Ouest");
         this.aButtonWest.addActionListener(this);
         
-        this.aButtonLook = new JButton("Regarder");
-        this.aButtonLook.addActionListener(this);
+        this.aButtonUp = new JButton("Monter");
+        this.aButtonUp.addActionListener(this);
+        
+         this.aButtonDown = new JButton("Decendre");
+        this.aButtonDown.addActionListener(this);
         
         this.aButtonBack = new JButton("retour en arrière");
         this.aButtonBack.addActionListener(this);
@@ -143,8 +148,9 @@ public class UserInterface implements ActionListener
         vButtons.add(this.aButtonSouth);
         vButtons.add(this.aButtonEast);
         vButtons.add(this.aButtonWest);
-        vButtons.add(this.aButtonLook);
         vButtons.add(this.aButtonBack);
+        vButtons.add(this.aButtonUp);
+        vButtons.add(this.aButtonDown);
         
         
         JPanel vPanel = new JPanel();
@@ -197,6 +203,10 @@ public class UserInterface implements ActionListener
                 this.aEngine.interpretCommand("look");
             else if ( pE.getSource() == this.aButtonBack )
                 this.aEngine.interpretCommand("back");
+            else if ( pE.getSource() == this.aButtonUp )
+                this.aEngine.interpretCommand("go up");
+            else if ( pE.getSource() == this.aButtonDown )
+                this.aEngine.interpretCommand("go down");
         }
     } // actionPerformed(.)
 

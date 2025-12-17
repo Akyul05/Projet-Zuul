@@ -1,0 +1,5 @@
+help
+look
+go east
+look
+quit

@@ -62,12 +62,16 @@ public class GameEngine
     private void createRooms()
     {
         // Création des lieux avec des images (noms de fichiers temporaires)
-        Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");
+       Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");
         Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.png");
-        Room vRuines = new Room("au cœur des Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");
+        Room vRuines = new Room("aux Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");
+        Room vTour = new Room("devant une Tour Effondrée qui semble toucher les nuages.", "Tour.png");
+        Room vRiviere = new Room("au bord de la Rivière des Ombres, l'eau est sombre et calme.", "Riviere.png");
+        Room vCaverne = new Room("dans la Caverne de Cristal, les parois scintillent d'une lueur étrange.", "caverne.png");
+        Room vTemple = new Room("dans le Temple Oublié, un lieu sacré envahi par la végétation.", "Temple.png");
+        Room vPlaine = new Room("sur la Plaine Stérile, un champ de bataille abandonné.", "Pleines.png");
         Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.png");
         Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");
-
         // Initialisation des sorties
         vVillage.setExit("east", vForet);
         
@@ -76,26 +80,54 @@ public class GameEngine
         vForet.setExit("south", vSanctuaire);
         
         vRuines.setExit("west", vForet);
+        vRuines.setExit("east", vTour);
         
-        vSanctuaire.setExit("north", vForet);
-        vSanctuaire.setExit("south", vForge);
+        vTour.setExit("west", vRuines);
+        vTour.setExit("down", vPlaine);
+        
+        vRiviere.setExit("north", vForet);
+        vRiviere.setExit("south", vTemple);
+        
+        vTemple.setExit("north", vRiviere);
+        vTemple.setExit("down", vCaverne);
+        vTemple.setExit("east", vPlaine);
+        vTemple.setExit("south", vSanctuaire);
+        
+        vCaverne.setExit("up", vTemple);
+        
+        vPlaine.setExit("west", vTemple);
+        vPlaine.setExit("up", vTour);
+        
+        vSanctuaire.setExit("north", vTemple);
+        vSanctuaire.setExit("down", vForge);
         
         vForge.setExit("north", vSanctuaire);
-        // Initialisation des Items
-        Item vHerbes = new Item("herbes", "des herbes médicinales luminescentes", 0.5);
-        vForet.addItem(vHerbes); 
-
-        Item vGemmeBleue = new Item("gemme", "une gemme légendaire pulsant d'une lueur bleue", 1.0);
-        vRuines.addItem(vGemmeBleue);
-
-        Item vSocle = new Item("socle", "le socle sacré de l'épée des âmes", 50.0);
-        vForge.addItem(vSocle);
-
-        Item vLivre = new Item("livre", "un vieux livre poussiéreux laissé par l'Érudit", 1.2);
-        vVillage.addItem(vLivre);
         
-        Item vEpeeBrisee = new Item("epee", "une vieille épée d'entraînement brisée", 2.0);
-        vVillage.addItem(vEpeeBrisee);
+        // Initialisation des Items
+        // Village
+        vVillage.addItem(new Item("livre", "un vieux livre poussiéreux laissé par l'Érudit", 1.2));
+        vVillage.addItem(new Item("epee", "une vieille épée d'entraînement brisée", 2.0));
+        // Forêt
+        
+        vForet.addItem(new Item("herbes", "des herbes médicinales luminescentes", 0.5));
+
+        // Ruines (Gemme 1)
+        vRuines.addItem(new Item("gemme1", "la Gemme de Force (Rouge)", 1.0));
+
+        // Rivière
+        vRiviere.addItem(new Item("coffre", "un petit coffre verrouillé échoué sur la rive", 3.0));
+
+        // Caverne (Gemme 2)
+        vCaverne.addItem(new Item("gemme2", "la Gemme de l'Esprit (Bleue)", 1.0));
+        
+        // Temple (Gemme 3)
+        vTemple.addItem(new Item("gemme3", "la Gemme du Courage (Verte)", 1.0));
+        
+        // Plaine
+        vPlaine.addItem(new Item("bouclier", "un bouclier de soldat abandonné", 4.5));
+
+        // Forge
+        vForge.addItem(new Item("socle", "le socle sacré de l'épée des âmes", 50.0));
         
         this.aCurrentRoom = vVillage; // Le jeu commence au village
     } // createRooms()

@@ -1,4 +1,8 @@
 import java.util.Stack;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+
 /**
  *  This class is part of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.
@@ -102,7 +106,7 @@ public class GameEngine
      */
     public void interpretCommand( final String pCommandLine ) 
     {
-        this.aGui.println( "> " + pCommandLine ); // Affiche la commande tapée (écho)
+        this.aGui.println( "> " + pCommandLine ); 
         Command vCommand = this.aParser.getCommand( pCommandLine );
 
         if ( vCommand.isUnknown() ) {
@@ -133,10 +137,14 @@ public class GameEngine
             else
                 this.endGame();
         }
+        else if (vCommandWord.equals("test")){
+            this.test(vCommand);
+        }
     } // interpretCommand(.)
-
-    // --- Implémentation des commandes utilisateur ---
-
+    
+    
+    
+    
     /**
      * Affiche les informations sur le lieu courant (description + image).
      */
@@ -209,6 +217,11 @@ public class GameEngine
         this.aGui.enable( false ); // Désactive la zone de saisie
     } // endGame()
     
+    /**
+     * commande 'back'.
+     * Permet de revenir à la pièce précédente.
+     * @param pCommand La commande saisie par l'utilisateur.
+     */
     private void back(final Command pCommand)
     {
         if (pCommand.hasSecondWord()){
@@ -223,5 +236,32 @@ public class GameEngine
         Room vPrevRoom = this.aPrevRooms.pop();
         this.aCurrentRoom = vPrevRoom;
         this.printLocationInfo();
+    }
+    
+    /**
+     * Exécute une série de commandes lues depuis un fichier texte.
+     * @param pCommand La commande contenant le nom du fichier.
+     */
+    private void test(final Command pCommand)
+    {
+        if(!pCommand.hasSecondWord()){
+            this.aGui.println("test what?");
+            return;
+        }
+        
+        String vFileName = pCommand.getSecondWord();
+        try {
+            Scanner vScanner = new Scanner(new File(vFileName));
+            this.aGui.println(" test "+ vFileName +" :");
+            while (vScanner.hasNextLine()){
+                String vLine = vScanner.nextLine();
+                this.interpretCommand(vLine);
+            }
+            vScanner.close();
+            this.aGui.println("  Test fini ");
+        }
+        catch (FileNotFoundException pExpeption){
+            this.aGui.println("Fichier non trouvé : "+ vFileName);
+        }
     }
 } // GameEngine

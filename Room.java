@@ -4,7 +4,7 @@ import java.util.Iterator;
 /**
  * Classe Room - un lieu du jeu d'aventure Zuul.
  *
- * @Ghezli Ramy
+ * @author Ghezli Ramy
  */
 public class Room
 {
@@ -16,6 +16,7 @@ public class Room
      * Constructeur pour les objets de la classe Room.
      * Initialise la description et le HashMap des sorties.
      * @param pDescription La description de la pièce .
+     * @param pImage Le nom du fichier image.
      */
     public Room(final String pDescription, final String pImage)
     {
@@ -24,6 +25,11 @@ public class Room
         this.aImageName=pImage;
         this.aItems = new HashMap<String, Item>();
     }//Room
+    
+    /**
+     * Accesseur pour le nom de l'image de la pièce.
+     * @return Le nom du fichier image.
+     */
     public String getImageName()
     {
         return this.aImageName;
@@ -31,7 +37,6 @@ public class Room
     /**
      * Accesseur pour la description d'une pièce.
      * @return Description de la pièce.
-     * @param pImage Le nom de l'image
      */
     public String getDescription()
     {
@@ -82,17 +87,29 @@ public class Room
         return vExits;
         
     }//getExitString()
-    
+    /**
+     * Ajoute un item à la pièce.
+     * @param pItem L'item à ajouter dans cette pièce.
+     */
     public void addItem(final Item pItem)
     {
         this.aItems.put(pItem.getName(), pItem);
     }
     
+    /**
+     * Retourne l'item qui correspond au nom passé en paramètre.
+     * @param pName Le nom de l'item recherché.
+     * @return L'objet Item correspondant.
+     */
     public Item getItem(final String pName)
     {
         return this.aItems.get(pName);
     }
     
+    /**
+     * Retourne une chaîne décrivant tous les items présents dans la pièce.
+     * @return Une chaîne de caractères listant les items (ex: "Objets : une épée un bouclier").
+     */
     public String getItemString()
     {
         if (this.aItems.isEmpty()) {

@@ -1,0 +1,13 @@
+look
+help
+eat
+look
+go east
+look
+go east
+look
+back
+look
+go west
+look
+quit

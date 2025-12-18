@@ -17,9 +17,8 @@ import java.io.FileNotFoundException;
 public class GameEngine
 {
     private Parser        aParser;
-    private Room          aCurrentRoom;
     private UserInterface aGui;
-    private Stack <Room> aPrevRooms;
+    private Player aPlayer;
     /**
      * Constructeur pour les objets de la classe GameEngine.
      * Crée le parseur et la carte du jeu.
@@ -28,7 +27,6 @@ public class GameEngine
     {
         this.aParser = new Parser();
         this.createRooms();
-        this.aPrevRooms = new Stack <Room>();
     } // GameEngine()
 
     /**
@@ -65,11 +63,11 @@ public class GameEngine
        Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");
         Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.png");
         Room vRuines = new Room("aux Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");
-        Room vTour = new Room("devant une Tour Effondrée qui semble toucher les nuages.", "Tour.png");
-        Room vRiviere = new Room("au bord de la Rivière des Ombres, l'eau est sombre et calme.", "Riviere.png");
+        Room vTour = new Room("devant une Tour Effondrée qui semble toucher les nuages.", "tour.png");
+        Room vRiviere = new Room("au bord de la Rivière des Ombres, l'eau est sombre et calme.", "riviere.png");
         Room vCaverne = new Room("dans la Caverne de Cristal, les parois scintillent d'une lueur étrange.", "caverne.png");
-        Room vTemple = new Room("dans le Temple Oublié, un lieu sacré envahi par la végétation.", "Temple.png");
-        Room vPlaine = new Room("sur la Plaine Stérile, un champ de bataille abandonné.", "Pleines.png");
+        Room vTemple = new Room("dans le Temple Oublié, un lieu sacré envahi par la végétation.", "temple.png");
+        Room vPlaine = new Room("sur la Plaine Stérile, un champ de bataille abandonné.", "pleines.png");
         Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.png");
         Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");
         // Initialisation des sorties
@@ -129,7 +127,7 @@ public class GameEngine
         // Forge
         vForge.addItem(new Item("socle", "le socle sacré de l'épée des âmes", 50.0));
         
-        this.aCurrentRoom = vVillage; // Le jeu commence au village
+        this.aPlayer = new Player ("Hero", vVillage);
     } // createRooms()
 
     /**
@@ -182,11 +180,10 @@ public class GameEngine
      */
     private void printLocationInfo()
     {
-        this.aGui.println( this.aCurrentRoom.getLongDescription() );
-        
+        this.aGui.println( this.aPlayer.getCurrentRoom().getLongDescription() );
         // Affiche l'image si elle existe
-        if ( this.aCurrentRoom.getImageName() != null ) {
-            this.aGui.showImage( this.aCurrentRoom.getImageName() );
+        if ( this.aPlayer.getCurrentRoom().getImageName() != null ) {
+            this.aGui.showImage( this.aPlayer.getCurrentRoom().getImageName() );
         }
     } // printLocationInfo()
 
@@ -228,14 +225,13 @@ public class GameEngine
         }
 
         String vDirection = pCommand.getSecondWord();
-        Room vNextRoom = this.aCurrentRoom.getExit( vDirection );
+        Room vNextRoom = this.aPlayer.getCurrentRoom().getExit( vDirection );
 
         if ( vNextRoom == null ) {
             this.aGui.println( "There is no door!" );
         }
         else {
-            this.aPrevRooms.push(this.aCurrentRoom);
-            this.aCurrentRoom = vNextRoom;
+            this.aPlayer.move(vNextRoom);
             this.printLocationInfo();
         }
     } // goRoom(.)
@@ -260,14 +256,14 @@ public class GameEngine
             this.aGui.println("back where?");
             return;
         }
-        if(this.aPrevRooms.isEmpty()){
-            this.aGui.println("retour en arrière impossible");
-            return ;
-            
+        
+        if (this.aPlayer.canGoBack()){
+            this.aPlayer.back();
+            this.printLocationInfo();
         }
-        Room vPrevRoom = this.aPrevRooms.pop();
-        this.aCurrentRoom = vPrevRoom;
-        this.printLocationInfo();
+        else{
+            this.aGui.println("Retour en arriere imporssible");
+        }
     }
     
     /**

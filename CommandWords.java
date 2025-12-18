@@ -20,7 +20,7 @@ public class CommandWords
      */
     public CommandWords()
     {
-        this.aValidCommands = new String[7];
+        this.aValidCommands = new String[9];
         this.aValidCommands[0] = "go";
         this.aValidCommands[1] = "help";
         this.aValidCommands[2] = "quit";
@@ -28,7 +28,8 @@ public class CommandWords
         this.aValidCommands[4] = "eat";
         this.aValidCommands[5] = "back";
         this.aValidCommands[6] = "test";
-        
+        this.aValidCommands[7] = "take";
+        this.aValidCommands[8] = "drop";
     } // CommandWords()
     public String getCommandList()
     {

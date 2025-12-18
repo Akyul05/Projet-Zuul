@@ -10,6 +10,7 @@ public class Player
    private String aName;
    private Room aCurrentRoom;
    private Stack <Room> aPrevRooms;
+   private Item aCurrentItem;
    /**
     * Constructeur naturel de Player.
     * @param pName Le nom du joueur.
@@ -63,5 +64,32 @@ public class Player
     public boolean canGoBack()
     {
         return !this.aPrevRooms.isEmpty();
+    }
+    
+    /**
+     * prend un item présent dans la pièce courante.
+     * @param pItem Le nom de l'item à prendre.
+     * @return 
+     */
+    public void take(final String pItem)
+    {
+        Item vItem = this.aCurrentRoom.getItem(pItem);
+        this.aCurrentRoom.removeItem(pItem);
+        this.aCurrentItem= vItem;
+    }
+    
+    /**
+     * dépose l'item dans la pièce courante.
+     * @param pItem Le nom de l'item à déposer.
+     */
+    public void drop(final String pItem)
+    {
+        this.aCurrentRoom.addItem(this.aCurrentItem);
+        this.aCurrentItem = null;
+    }
+    
+    public Item getCurrentItem()
+    {
+        return this.aCurrentItem;
     }
 }

@@ -97,6 +97,15 @@ public class Room
     }
     
     /**
+     * Retire un item de la pièce.
+     * @param pItem Le nom de l'item à retirer.
+     */
+    public void removeItem(final String pItem)
+    {
+        this.aItems.remove(pItem);
+    }
+    
+    /**
      * Retourne l'item qui correspond au nom passé en paramètre.
      * @param pName Le nom de l'item recherché.
      * @return L'objet Item correspondant.

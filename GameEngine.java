@@ -170,10 +170,15 @@ public class GameEngine
         else if (vCommandWord.equals("test")){
             this.test(vCommand);
         }
+        else if (vCommandWord.equals("take")){
+            this.take(vCommand);
+        }
+        else if (vCommandWord.equals("drop"))
+        {
+            this.drop(vCommand);
+        }
+        
     } // interpretCommand(.)
-    
-    
-    
     
     /**
      * Affiche les informations sur le lieu courant (description + image).
@@ -291,5 +296,39 @@ public class GameEngine
         catch (FileNotFoundException pExpeption){
             this.aGui.println("Fichier non trouvé : "+ vFileName);
         }
+    }
+    private void take(final Command pCommand)
+    {
+        if(!pCommand.hasSecondWord()){
+            this.aGui.println("take what?");
+            return;
+        }
+        
+        String vItem = pCommand.getSecondWord();
+        Item vItemInRoom = this.aPlayer .getCurrentRoom().getItem(vItem);
+        if(vItem == null){
+            this.aGui.println(vItem + " n'est pas present dans cette pièce");
+            return;
+        }
+        this.aPlayer.take(vItem);
+        this.aGui.println("vous aves ramassé : "+ vItem);
+    }
+    
+    private void drop(final Command pCommand)
+    {
+        if (!pCommand.hasSecondWord()) {
+            this.aGui.println("drop what?");
+            return;
+        }
+        String vItemName = pCommand.getSecondWord();
+        Item vItemCarried = this.aPlayer.getCurrentItem();
+
+      
+        if (vItemCarried == null) {
+            this.aGui.println("Vous ne portez pas d'objet");
+            return;
+        }
+        this.aPlayer.drop(vItemName);
+        this.aGui.println("Vous avez posé : "+vItemName);
     }
 } // GameEngine

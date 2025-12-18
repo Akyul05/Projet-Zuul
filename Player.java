@@ -1,4 +1,7 @@
 import java.util.Stack;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Iterator;
 /**
  * Décrivez votre classe Player ici.
  *
@@ -10,7 +13,7 @@ public class Player
    private String aName;
    private Room aCurrentRoom;
    private Stack <Room> aPrevRooms;
-   private Item aCurrentItem;
+   private HashMap<String,Item> aInventory;
    /**
     * Constructeur naturel de Player.
     * @param pName Le nom du joueur.
@@ -21,6 +24,7 @@ public class Player
        this.aName= pName;
        this.aCurrentRoom= pCurrentRoom;
        this.aPrevRooms = new Stack<Room>();
+       this.aInventory = new HashMap<String, Item>();
     }
     /**
      * Accesseur de la pièce courante.
@@ -74,8 +78,10 @@ public class Player
     public void take(final String pItem)
     {
         Item vItem = this.aCurrentRoom.getItem(pItem);
-        this.aCurrentRoom.removeItem(pItem);
-        this.aCurrentItem= vItem;
+        if (vItem != null){
+            this.aCurrentRoom.removeItem(pItem);
+            this.aInventory.put(pItem,vItem);
+        }
     }
     
     /**
@@ -84,12 +90,29 @@ public class Player
      */
     public void drop(final String pItem)
     {
-        this.aCurrentRoom.addItem(this.aCurrentItem);
-        this.aCurrentItem = null;
+        Item vItem = this.aInventory.get(pItem);
+        if(vItem != null){
+            this.aInventory.remove(pItem);
+            this.aCurrentRoom.addItem(vItem);
+        }
+        
     }
     
-    public Item getCurrentItem()
+    public Item getItem(final String pItem)
     {
-        return this.aCurrentItem;
+        return this.aInventory.get(pItem);
+    }
+    
+    public String getInventoryString()
+    {
+        if (this.aInventory.isEmpty()){
+            return "vous ne portez rien.";
+        }
+        String vReturnString = "Inventaire : ";
+        Set <String> vKeys = this.aInventory.keySet();
+        for (String vItem:vKeys){
+            vReturnString += " "+vItem;
+        }
+        return vReturnString;
     }
 }

@@ -177,6 +177,10 @@ public class GameEngine
         {
             this.drop(vCommand);
         }
+        else if (vCommandWord.equals("items"))
+        {
+            this.items(vCommand);
+        }
         
     } // interpretCommand(.)
     
@@ -320,15 +324,19 @@ public class GameEngine
             this.aGui.println("drop what?");
             return;
         }
-        String vItemName = pCommand.getSecondWord();
-        Item vItemCarried = this.aPlayer.getCurrentItem();
+        String vItem = pCommand.getSecondWord();
+        Item vItemCarried = this.aPlayer.getItem(vItem);
 
       
         if (vItemCarried == null) {
             this.aGui.println("Vous ne portez pas d'objet");
             return;
         }
-        this.aPlayer.drop(vItemName);
-        this.aGui.println("Vous avez posé : "+vItemName);
+        this.aPlayer.drop(vItem);
+        this.aGui.println("Vous avez posé : "+vItem);
+    }
+    private void items (final Command pCommand)
+    {
+        this.aGui.println(this.aPlayer.getInventoryString());
     }
 } // GameEngine

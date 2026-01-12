@@ -1,7 +1,4 @@
 import java.util.Stack;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Iterator;
 /**
  * Décrivez votre classe Player ici.
  *
@@ -13,7 +10,8 @@ public class Player
    private String aName;
    private Room aCurrentRoom;
    private Stack <Room> aPrevRooms;
-   private HashMap<String,Item> aInventory;
+   private ItemList aInventory;
+   private double aMaxWeight;
    /**
     * Constructeur naturel de Player.
     * @param pName Le nom du joueur.
@@ -24,7 +22,8 @@ public class Player
        this.aName= pName;
        this.aCurrentRoom= pCurrentRoom;
        this.aPrevRooms = new Stack<Room>();
-       this.aInventory = new HashMap<String, Item>();
+       this.aInventory = new ItemList();
+       this.aMaxWeight = 2.0;
     }
     /**
      * Accesseur de la pièce courante.
@@ -73,15 +72,24 @@ public class Player
     /**
      * prend un item présent dans la pièce courante.
      * @param pItem Le nom de l'item à prendre.
-     * @return 
      */
-    public void take(final String pItem)
+    public boolean take(final String pItem)
     {
         Item vItem = this.aCurrentRoom.getItem(pItem);
-        if (vItem != null){
-            this.aCurrentRoom.removeItem(pItem);
-            this.aInventory.put(pItem,vItem);
+        if (vItem == null){
+        return false;}
+        
+        double vTotalWeight = this.aInventory.getTotalWeight();
+        double vItemWeight = vItem.getWeight();
+        
+        if (vTotalWeight + vItemWeight > this.aMaxWeight){
+            return false;
         }
+        
+        this.aCurrentRoom.removeItem(pItem);
+        this.aInventory.addItem(vItem);
+        
+        return true;
     }
     
     /**
@@ -90,9 +98,9 @@ public class Player
      */
     public void drop(final String pItem)
     {
-        Item vItem = this.aInventory.get(pItem);
+        Item vItem = this.aInventory.getItem(pItem);
         if(vItem != null){
-            this.aInventory.remove(pItem);
+            this.aInventory.removeItem(pItem);
             this.aCurrentRoom.addItem(vItem);
         }
         
@@ -100,19 +108,15 @@ public class Player
     
     public Item getItem(final String pItem)
     {
-        return this.aInventory.get(pItem);
+        return this.aInventory.getItem(pItem);
     }
     
     public String getInventoryString()
     {
-        if (this.aInventory.isEmpty()){
-            return "vous ne portez rien.";
-        }
-        String vReturnString = "Inventaire : ";
-        Set <String> vKeys = this.aInventory.keySet();
-        for (String vItem:vKeys){
-            vReturnString += " "+vItem;
-        }
-        return vReturnString;
+        return "Inventaire : "+ this.aInventory.getItemsString();
+    }
+    public double getMaxWeight()
+    {
+        return this.aMaxWeight;
     }
 }

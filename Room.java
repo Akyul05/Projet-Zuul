@@ -11,7 +11,7 @@ public class Room
     private String aDescription; 
     private HashMap<String, Room > aExits;
     private String aImageName;
-    private HashMap< String , Item> aItems;
+    private ItemList aItems;
     /**
      * Constructeur pour les objets de la classe Room.
      * Initialise la description et le HashMap des sorties.
@@ -23,7 +23,7 @@ public class Room
         this.aDescription = pDescription;
         aExits= new HashMap<String, Room>();
         this.aImageName=pImage;
-        this.aItems = new HashMap<String, Item>();
+        this.aItems = new ItemList();
     }//Room
     
     /**
@@ -93,7 +93,7 @@ public class Room
      */
     public void addItem(final Item pItem)
     {
-        this.aItems.put(pItem.getName(), pItem);
+        this.aItems.addItem(pItem);
     }
     
     /**
@@ -102,7 +102,7 @@ public class Room
      */
     public void removeItem(final String pItem)
     {
-        this.aItems.remove(pItem);
+        this.aItems.removeItem(pItem);
     }
     
     /**
@@ -112,7 +112,7 @@ public class Room
      */
     public Item getItem(final String pName)
     {
-        return this.aItems.get(pName);
+        return this.aItems.getItem(pName);
     }
     
     /**
@@ -121,14 +121,7 @@ public class Room
      */
     public String getItemString()
     {
-        if (this.aItems.isEmpty()) {
-            return "Pas d'objet ici.";
-        }
-        String vReturnString = "Objets : ";
-        Set<String> vKeys = this.aItems.keySet();
-        for (String vItemName : vKeys){
-            vReturnString += " " +this.aItems.get(vItemName).getDescription();
-        }
-        return vReturnString;
+        return this.aItems.getItemsString();
     }
+
 } // Room

@@ -24,7 +24,7 @@
 <span class="source-line-no">011</span><span id="line-11">    private String aDescription; </span>
 <span class="source-line-no">012</span><span id="line-12">    private HashMap&lt;String, Room &gt; aExits;</span>
 <span class="source-line-no">013</span><span id="line-13">    private String aImageName;</span>
-<span class="source-line-no">014</span><span id="line-14">    private HashMap&lt; String , Item&gt; aItems;</span>
+<span class="source-line-no">014</span><span id="line-14">    private ItemList aItems;</span>
 <span class="source-line-no">015</span><span id="line-15">    /**</span>
 <span class="source-line-no">016</span><span id="line-16">     * Constructeur pour les objets de la classe Room.</span>
 <span class="source-line-no">017</span><span id="line-17">     * Initialise la description et le HashMap des sorties.</span>
@@ -36,7 +36,7 @@
 <span class="source-line-no">023</span><span id="line-23">        this.aDescription = pDescription;</span>
 <span class="source-line-no">024</span><span id="line-24">        aExits= new HashMap&lt;String, Room&gt;();</span>
 <span class="source-line-no">025</span><span id="line-25">        this.aImageName=pImage;</span>
-<span class="source-line-no">026</span><span id="line-26">        this.aItems = new HashMap&lt;String, Item&gt;();</span>
+<span class="source-line-no">026</span><span id="line-26">        this.aItems = new ItemList();</span>
 <span class="source-line-no">027</span><span id="line-27">    }//Room</span>
 <span class="source-line-no">028</span><span id="line-28">    </span>
 <span class="source-line-no">029</span><span id="line-29">    /**</span>
@@ -106,36 +106,38 @@
 <span class="source-line-no">093</span><span id="line-93">     */</span>
 <span class="source-line-no">094</span><span id="line-94">    public void addItem(final Item pItem)</span>
 <span class="source-line-no">095</span><span id="line-95">    {</span>
-<span class="source-line-no">096</span><span id="line-96">        this.aItems.put(pItem.getName(), pItem);</span>
+<span class="source-line-no">096</span><span id="line-96">        this.aItems.addItem(pItem);</span>
 <span class="source-line-no">097</span><span id="line-97">    }</span>
 <span class="source-line-no">098</span><span id="line-98">    </span>
 <span class="source-line-no">099</span><span id="line-99">    /**</span>
-<span class="source-line-no">100</span><span id="line-100">     * Retourne l'item qui correspond au nom passé en paramètre.</span>
-<span class="source-line-no">101</span><span id="line-101">     * @param pName Le nom de l'item recherché.</span>
-<span class="source-line-no">102</span><span id="line-102">     * @return L'objet Item correspondant.</span>
-<span class="source-line-no">103</span><span id="line-103">     */</span>
-<span class="source-line-no">104</span><span id="line-104">    public Item getItem(final String pName)</span>
-<span class="source-line-no">105</span><span id="line-105">    {</span>
-<span class="source-line-no">106</span><span id="line-106">        return this.aItems.get(pName);</span>
-<span class="source-line-no">107</span><span id="line-107">    }</span>
-<span class="source-line-no">108</span><span id="line-108">    </span>
-<span class="source-line-no">109</span><span id="line-109">    /**</span>
-<span class="source-line-no">110</span><span id="line-110">     * Retourne une chaîne décrivant tous les items présents dans la pièce.</span>
-<span class="source-line-no">111</span><span id="line-111">     * @return Une chaîne de caractères listant les items (ex: "Objets : une épée un bouclier").</span>
+<span class="source-line-no">100</span><span id="line-100">     * Retire un item de la pièce.</span>
+<span class="source-line-no">101</span><span id="line-101">     * @param pItem Le nom de l'item à retirer.</span>
+<span class="source-line-no">102</span><span id="line-102">     */</span>
+<span class="source-line-no">103</span><span id="line-103">    public void removeItem(final String pItem)</span>
+<span class="source-line-no">104</span><span id="line-104">    {</span>
+<span class="source-line-no">105</span><span id="line-105">        this.aItems.removeItem(pItem);</span>
+<span class="source-line-no">106</span><span id="line-106">    }</span>
+<span class="source-line-no">107</span><span id="line-107">    </span>
+<span class="source-line-no">108</span><span id="line-108">    /**</span>
+<span class="source-line-no">109</span><span id="line-109">     * Retourne l'item qui correspond au nom passé en paramètre.</span>
+<span class="source-line-no">110</span><span id="line-110">     * @param pName Le nom de l'item recherché.</span>
+<span class="source-line-no">111</span><span id="line-111">     * @return L'objet Item correspondant.</span>
 <span class="source-line-no">112</span><span id="line-112">     */</span>
-<span class="source-line-no">113</span><span id="line-113">    public String getItemString()</span>
+<span class="source-line-no">113</span><span id="line-113">    public Item getItem(final String pName)</span>
 <span class="source-line-no">114</span><span id="line-114">    {</span>
-<span class="source-line-no">115</span><span id="line-115">        if (this.aItems.isEmpty()) {</span>
-<span class="source-line-no">116</span><span id="line-116">            return "Pas d'objet ici.";</span>
-<span class="source-line-no">117</span><span id="line-117">        }</span>
-<span class="source-line-no">118</span><span id="line-118">        String vReturnString = "Objets : ";</span>
-<span class="source-line-no">119</span><span id="line-119">        Set&lt;String&gt; vKeys = this.aItems.keySet();</span>
-<span class="source-line-no">120</span><span id="line-120">        for (String vItemName : vKeys){</span>
-<span class="source-line-no">121</span><span id="line-121">            vReturnString += " " +this.aItems.get(vItemName).getDescription();</span>
-<span class="source-line-no">122</span><span id="line-122">        }</span>
-<span class="source-line-no">123</span><span id="line-123">        return vReturnString;</span>
-<span class="source-line-no">124</span><span id="line-124">    }</span>
-<span class="source-line-no">125</span><span id="line-125">} // Room</span>
+<span class="source-line-no">115</span><span id="line-115">        return this.aItems.getItem(pName);</span>
+<span class="source-line-no">116</span><span id="line-116">    }</span>
+<span class="source-line-no">117</span><span id="line-117">    </span>
+<span class="source-line-no">118</span><span id="line-118">    /**</span>
+<span class="source-line-no">119</span><span id="line-119">     * Retourne une chaîne décrivant tous les items présents dans la pièce.</span>
+<span class="source-line-no">120</span><span id="line-120">     * @return Une chaîne de caractères listant les items (ex: "Objets : une épée un bouclier").</span>
+<span class="source-line-no">121</span><span id="line-121">     */</span>
+<span class="source-line-no">122</span><span id="line-122">    public String getItemString()</span>
+<span class="source-line-no">123</span><span id="line-123">    {</span>
+<span class="source-line-no">124</span><span id="line-124">        return this.aItems.getItemsString();</span>
+<span class="source-line-no">125</span><span id="line-125">    }</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">} // Room</span>
 
 
 

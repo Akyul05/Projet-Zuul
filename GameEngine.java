@@ -304,18 +304,24 @@ public class GameEngine
     private void take(final Command pCommand)
     {
         if(!pCommand.hasSecondWord()){
-            this.aGui.println("take what?");
+            this.aGui.println("prendre quoi?");
             return;
         }
         
         String vItem = pCommand.getSecondWord();
         Item vItemInRoom = this.aPlayer .getCurrentRoom().getItem(vItem);
-        if(vItem == null){
+        if(vItemInRoom == null){
             this.aGui.println(vItem + " n'est pas present dans cette pièce");
             return;
         }
-        this.aPlayer.take(vItem);
-        this.aGui.println("vous aves ramassé : "+ vItem);
+        boolean vTake = this.aPlayer.take(vItem);
+        if (vTake == true){
+            this.aGui.println("Vous avez ramassé : " + vItem);
+        }
+        else {
+            this.aGui.println("Trop lourd !! (capacité :)"+ this.aPlayer.getMaxWeight()+ "kg)");
+        }
+        
     }
     
     private void drop(final Command pCommand)

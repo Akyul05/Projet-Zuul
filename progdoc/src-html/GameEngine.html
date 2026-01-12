@@ -12,239 +12,347 @@
 <main role="main">
 <div class="source-container">
 <pre><span class="source-line-no">001</span><span id="line-1">import java.util.Stack;</span>
-<span class="source-line-no">002</span><span id="line-2">/**</span>
-<span class="source-line-no">003</span><span id="line-3"> *  This class is part of the "World of Zuul" application. </span>
-<span class="source-line-no">004</span><span id="line-4"> *  "World of Zuul" is a very simple, text based adventure game.</span>
-<span class="source-line-no">005</span><span id="line-5"> * </span>
-<span class="source-line-no">006</span><span id="line-6"> *  This class creates all rooms, creates the parser and starts</span>
-<span class="source-line-no">007</span><span id="line-7"> *  the game.  It also evaluates and executes the commands that </span>
-<span class="source-line-no">008</span><span id="line-8"> *  the parser returns.</span>
+<span class="source-line-no">002</span><span id="line-2">import java.util.Scanner;</span>
+<span class="source-line-no">003</span><span id="line-3">import java.io.File;</span>
+<span class="source-line-no">004</span><span id="line-4">import java.io.FileNotFoundException;</span>
+<span class="source-line-no">005</span><span id="line-5"></span>
+<span class="source-line-no">006</span><span id="line-6">/**</span>
+<span class="source-line-no">007</span><span id="line-7"> *  This class is part of the "World of Zuul" application. </span>
+<span class="source-line-no">008</span><span id="line-8"> *  "World of Zuul" is a very simple, text based adventure game.</span>
 <span class="source-line-no">009</span><span id="line-9"> * </span>
-<span class="source-line-no">010</span><span id="line-10"> * @author  Michael Kolling and David J. Barnes</span>
-<span class="source-line-no">011</span><span id="line-11"> * @version 1.0 (Jan 2003) DB edited (2019)</span>
-<span class="source-line-no">012</span><span id="line-12"> */</span>
-<span class="source-line-no">013</span><span id="line-13">public class GameEngine</span>
-<span class="source-line-no">014</span><span id="line-14">{</span>
-<span class="source-line-no">015</span><span id="line-15">    private Parser        aParser;</span>
-<span class="source-line-no">016</span><span id="line-16">    private Room          aCurrentRoom;</span>
-<span class="source-line-no">017</span><span id="line-17">    private UserInterface aGui;</span>
-<span class="source-line-no">018</span><span id="line-18">    private Stack &lt;Room&gt; aPrevRooms;</span>
-<span class="source-line-no">019</span><span id="line-19">    /**</span>
-<span class="source-line-no">020</span><span id="line-20">     * Constructeur pour les objets de la classe GameEngine.</span>
-<span class="source-line-no">021</span><span id="line-21">     * Crée le parseur et la carte du jeu.</span>
-<span class="source-line-no">022</span><span id="line-22">     */</span>
-<span class="source-line-no">023</span><span id="line-23">    public GameEngine()</span>
-<span class="source-line-no">024</span><span id="line-24">    {</span>
-<span class="source-line-no">025</span><span id="line-25">        this.aParser = new Parser();</span>
-<span class="source-line-no">026</span><span id="line-26">        this.createRooms();</span>
-<span class="source-line-no">027</span><span id="line-27">        this.aPrevRooms = new Stack &lt;Room&gt;();</span>
-<span class="source-line-no">028</span><span id="line-28">    } // GameEngine()</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">    /**</span>
-<span class="source-line-no">031</span><span id="line-31">     * Associe l'interface graphique au moteur de jeu.</span>
-<span class="source-line-no">032</span><span id="line-32">     * Cette méthode est appelée par la classe Game au démarrage.</span>
-<span class="source-line-no">033</span><span id="line-33">     * @param pUserInterface L'interface graphique à utiliser.</span>
-<span class="source-line-no">034</span><span id="line-34">     */</span>
-<span class="source-line-no">035</span><span id="line-35">    public void setGUI( final UserInterface pUserInterface )</span>
-<span class="source-line-no">036</span><span id="line-36">    {</span>
-<span class="source-line-no">037</span><span id="line-37">        this.aGui = pUserInterface;</span>
-<span class="source-line-no">038</span><span id="line-38">        this.printWelcome();</span>
-<span class="source-line-no">039</span><span id="line-39">    } // setGUI(.)</span>
-<span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">    /**</span>
-<span class="source-line-no">042</span><span id="line-42">     * Affiche le message de bienvenue pour le joueur.</span>
-<span class="source-line-no">043</span><span id="line-43">     */</span>
-<span class="source-line-no">044</span><span id="line-44">    private void printWelcome()</span>
-<span class="source-line-no">045</span><span id="line-45">    {</span>
-<span class="source-line-no">046</span><span id="line-46">        this.aGui.print( "\n" );</span>
-<span class="source-line-no">047</span><span id="line-47">        this.aGui.println( "Bienvenue dans Aelyndor : L'Épée des Âmes !" );</span>
-<span class="source-line-no">048</span><span id="line-48">        this.aGui.println( "Le royaume est en ruines. Retrouvez les gemmes, reforgez l'épée, sauvez le monde." );</span>
-<span class="source-line-no">049</span><span id="line-49">        this.aGui.println( "Tapez 'help' si vous avez besoin d'aide." );</span>
-<span class="source-line-no">050</span><span id="line-50">        this.aGui.print( "\n" );</span>
-<span class="source-line-no">051</span><span id="line-51">        </span>
-<span class="source-line-no">052</span><span id="line-52">        this.printLocationInfo();</span>
-<span class="source-line-no">053</span><span id="line-53">    } // printWelcome()</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">    /**</span>
-<span class="source-line-no">056</span><span id="line-56">     * Crée toutes les pièces et relie leurs sorties.</span>
-<span class="source-line-no">057</span><span id="line-57">     */</span>
-<span class="source-line-no">058</span><span id="line-58">    private void createRooms()</span>
-<span class="source-line-no">059</span><span id="line-59">    {</span>
-<span class="source-line-no">060</span><span id="line-60">        // Création des lieux avec des images (noms de fichiers temporaires)</span>
-<span class="source-line-no">061</span><span id="line-61">        Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");</span>
-<span class="source-line-no">062</span><span id="line-62">        Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.png");</span>
-<span class="source-line-no">063</span><span id="line-63">        Room vRuines = new Room("au cœur des Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");</span>
-<span class="source-line-no">064</span><span id="line-64">        Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.png");</span>
-<span class="source-line-no">065</span><span id="line-65">        Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">        // Initialisation des sorties</span>
-<span class="source-line-no">068</span><span id="line-68">        vVillage.setExit("east", vForet);</span>
-<span class="source-line-no">069</span><span id="line-69">        </span>
-<span class="source-line-no">070</span><span id="line-70">        vForet.setExit("west", vVillage);</span>
-<span class="source-line-no">071</span><span id="line-71">        vForet.setExit("east", vRuines);</span>
-<span class="source-line-no">072</span><span id="line-72">        vForet.setExit("south", vSanctuaire);</span>
-<span class="source-line-no">073</span><span id="line-73">        </span>
-<span class="source-line-no">074</span><span id="line-74">        vRuines.setExit("west", vForet);</span>
+<span class="source-line-no">010</span><span id="line-10"> *  This class creates all rooms, creates the parser and starts</span>
+<span class="source-line-no">011</span><span id="line-11"> *  the game.  It also evaluates and executes the commands that </span>
+<span class="source-line-no">012</span><span id="line-12"> *  the parser returns.</span>
+<span class="source-line-no">013</span><span id="line-13"> * </span>
+<span class="source-line-no">014</span><span id="line-14"> * @author  Michael Kolling and David J. Barnes</span>
+<span class="source-line-no">015</span><span id="line-15"> * @version 1.0 (Jan 2003) DB edited (2019)</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">public class GameEngine</span>
+<span class="source-line-no">018</span><span id="line-18">{</span>
+<span class="source-line-no">019</span><span id="line-19">    private Parser        aParser;</span>
+<span class="source-line-no">020</span><span id="line-20">    private UserInterface aGui;</span>
+<span class="source-line-no">021</span><span id="line-21">    private Player aPlayer;</span>
+<span class="source-line-no">022</span><span id="line-22">    /**</span>
+<span class="source-line-no">023</span><span id="line-23">     * Constructeur pour les objets de la classe GameEngine.</span>
+<span class="source-line-no">024</span><span id="line-24">     * Crée le parseur et la carte du jeu.</span>
+<span class="source-line-no">025</span><span id="line-25">     */</span>
+<span class="source-line-no">026</span><span id="line-26">    public GameEngine()</span>
+<span class="source-line-no">027</span><span id="line-27">    {</span>
+<span class="source-line-no">028</span><span id="line-28">        this.aParser = new Parser();</span>
+<span class="source-line-no">029</span><span id="line-29">        this.createRooms();</span>
+<span class="source-line-no">030</span><span id="line-30">    } // GameEngine()</span>
+<span class="source-line-no">031</span><span id="line-31"></span>
+<span class="source-line-no">032</span><span id="line-32">    /**</span>
+<span class="source-line-no">033</span><span id="line-33">     * Associe l'interface graphique au moteur de jeu.</span>
+<span class="source-line-no">034</span><span id="line-34">     * Cette méthode est appelée par la classe Game au démarrage.</span>
+<span class="source-line-no">035</span><span id="line-35">     * @param pUserInterface L'interface graphique à utiliser.</span>
+<span class="source-line-no">036</span><span id="line-36">     */</span>
+<span class="source-line-no">037</span><span id="line-37">    public void setGUI( final UserInterface pUserInterface )</span>
+<span class="source-line-no">038</span><span id="line-38">    {</span>
+<span class="source-line-no">039</span><span id="line-39">        this.aGui = pUserInterface;</span>
+<span class="source-line-no">040</span><span id="line-40">        this.printWelcome();</span>
+<span class="source-line-no">041</span><span id="line-41">    } // setGUI(.)</span>
+<span class="source-line-no">042</span><span id="line-42"></span>
+<span class="source-line-no">043</span><span id="line-43">    /**</span>
+<span class="source-line-no">044</span><span id="line-44">     * Affiche le message de bienvenue pour le joueur.</span>
+<span class="source-line-no">045</span><span id="line-45">     */</span>
+<span class="source-line-no">046</span><span id="line-46">    private void printWelcome()</span>
+<span class="source-line-no">047</span><span id="line-47">    {</span>
+<span class="source-line-no">048</span><span id="line-48">        this.aGui.print( "\n" );</span>
+<span class="source-line-no">049</span><span id="line-49">        this.aGui.println( "Bienvenue dans Aelyndor : L'Épée des Âmes !" );</span>
+<span class="source-line-no">050</span><span id="line-50">        this.aGui.println( "Le royaume est en ruines. Retrouvez les gemmes, reforgez l'épée, sauvez le monde." );</span>
+<span class="source-line-no">051</span><span id="line-51">        this.aGui.println( "Tapez 'help' si vous avez besoin d'aide." );</span>
+<span class="source-line-no">052</span><span id="line-52">        this.aGui.print( "\n" );</span>
+<span class="source-line-no">053</span><span id="line-53">        </span>
+<span class="source-line-no">054</span><span id="line-54">        this.printLocationInfo();</span>
+<span class="source-line-no">055</span><span id="line-55">    } // printWelcome()</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">    /**</span>
+<span class="source-line-no">058</span><span id="line-58">     * Crée toutes les pièces et relie leurs sorties.</span>
+<span class="source-line-no">059</span><span id="line-59">     */</span>
+<span class="source-line-no">060</span><span id="line-60">    private void createRooms()</span>
+<span class="source-line-no">061</span><span id="line-61">    {</span>
+<span class="source-line-no">062</span><span id="line-62">        // Création des lieux avec des images (noms de fichiers temporaires)</span>
+<span class="source-line-no">063</span><span id="line-63">       Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");</span>
+<span class="source-line-no">064</span><span id="line-64">        Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.png");</span>
+<span class="source-line-no">065</span><span id="line-65">        Room vRuines = new Room("aux Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");</span>
+<span class="source-line-no">066</span><span id="line-66">        Room vTour = new Room("devant une Tour Effondrée qui semble toucher les nuages.", "tour.png");</span>
+<span class="source-line-no">067</span><span id="line-67">        Room vRiviere = new Room("au bord de la Rivière des Ombres, l'eau est sombre et calme.", "riviere.png");</span>
+<span class="source-line-no">068</span><span id="line-68">        Room vCaverne = new Room("dans la Caverne de Cristal, les parois scintillent d'une lueur étrange.", "caverne.png");</span>
+<span class="source-line-no">069</span><span id="line-69">        Room vTemple = new Room("dans le Temple Oublié, un lieu sacré envahi par la végétation.", "temple.png");</span>
+<span class="source-line-no">070</span><span id="line-70">        Room vPlaine = new Room("sur la Plaine Stérile, un champ de bataille abandonné.", "pleines.png");</span>
+<span class="source-line-no">071</span><span id="line-71">        Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.png");</span>
+<span class="source-line-no">072</span><span id="line-72">        Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");</span>
+<span class="source-line-no">073</span><span id="line-73">        // Initialisation des sorties</span>
+<span class="source-line-no">074</span><span id="line-74">        vVillage.setExit("east", vForet);</span>
 <span class="source-line-no">075</span><span id="line-75">        </span>
-<span class="source-line-no">076</span><span id="line-76">        vSanctuaire.setExit("north", vForet);</span>
-<span class="source-line-no">077</span><span id="line-77">        vSanctuaire.setExit("south", vForge);</span>
-<span class="source-line-no">078</span><span id="line-78">        </span>
-<span class="source-line-no">079</span><span id="line-79">        vForge.setExit("north", vSanctuaire);</span>
-<span class="source-line-no">080</span><span id="line-80">        // Initialisation des Items</span>
-<span class="source-line-no">081</span><span id="line-81">        Item vHerbes = new Item("herbes", "des herbes médicinales luminescentes", 0.5);</span>
-<span class="source-line-no">082</span><span id="line-82">        vForet.addItem(vHerbes); </span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">        Item vGemmeBleue = new Item("gemme", "une gemme légendaire pulsant d'une lueur bleue", 1.0);</span>
-<span class="source-line-no">085</span><span id="line-85">        vRuines.addItem(vGemmeBleue);</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">        Item vSocle = new Item("socle", "le socle sacré de l'épée des âmes", 50.0);</span>
-<span class="source-line-no">088</span><span id="line-88">        vForge.addItem(vSocle);</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">        Item vLivre = new Item("livre", "un vieux livre poussiéreux laissé par l'Érudit", 1.2);</span>
-<span class="source-line-no">091</span><span id="line-91">        vVillage.addItem(vLivre);</span>
-<span class="source-line-no">092</span><span id="line-92">        </span>
-<span class="source-line-no">093</span><span id="line-93">        Item vEpeeBrisee = new Item("epee", "une vieille épée d'entraînement brisée", 2.0);</span>
-<span class="source-line-no">094</span><span id="line-94">        vVillage.addItem(vEpeeBrisee);</span>
+<span class="source-line-no">076</span><span id="line-76">        vForet.setExit("west", vVillage);</span>
+<span class="source-line-no">077</span><span id="line-77">        vForet.setExit("east", vRuines);</span>
+<span class="source-line-no">078</span><span id="line-78">        vForet.setExit("south", vSanctuaire);</span>
+<span class="source-line-no">079</span><span id="line-79">        </span>
+<span class="source-line-no">080</span><span id="line-80">        vRuines.setExit("west", vForet);</span>
+<span class="source-line-no">081</span><span id="line-81">        vRuines.setExit("east", vTour);</span>
+<span class="source-line-no">082</span><span id="line-82">        </span>
+<span class="source-line-no">083</span><span id="line-83">        vTour.setExit("west", vRuines);</span>
+<span class="source-line-no">084</span><span id="line-84">        vTour.setExit("down", vPlaine);</span>
+<span class="source-line-no">085</span><span id="line-85">        </span>
+<span class="source-line-no">086</span><span id="line-86">        vRiviere.setExit("north", vForet);</span>
+<span class="source-line-no">087</span><span id="line-87">        vRiviere.setExit("south", vTemple);</span>
+<span class="source-line-no">088</span><span id="line-88">        </span>
+<span class="source-line-no">089</span><span id="line-89">        vTemple.setExit("north", vRiviere);</span>
+<span class="source-line-no">090</span><span id="line-90">        vTemple.setExit("down", vCaverne);</span>
+<span class="source-line-no">091</span><span id="line-91">        vTemple.setExit("east", vPlaine);</span>
+<span class="source-line-no">092</span><span id="line-92">        vTemple.setExit("south", vSanctuaire);</span>
+<span class="source-line-no">093</span><span id="line-93">        </span>
+<span class="source-line-no">094</span><span id="line-94">        vCaverne.setExit("up", vTemple);</span>
 <span class="source-line-no">095</span><span id="line-95">        </span>
-<span class="source-line-no">096</span><span id="line-96">        this.aCurrentRoom = vVillage; // Le jeu commence au village</span>
-<span class="source-line-no">097</span><span id="line-97">    } // createRooms()</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">    /**</span>
-<span class="source-line-no">100</span><span id="line-100">     * Interprète la commande donnée (exécutée par l'interface graphique).</span>
-<span class="source-line-no">101</span><span id="line-101">     * @param pCommandLine La chaîne de commande tapée par le joueur.</span>
-<span class="source-line-no">102</span><span id="line-102">     */</span>
-<span class="source-line-no">103</span><span id="line-103">    public void interpretCommand( final String pCommandLine ) </span>
-<span class="source-line-no">104</span><span id="line-104">    {</span>
-<span class="source-line-no">105</span><span id="line-105">        this.aGui.println( "&gt; " + pCommandLine ); // Affiche la commande tapée (écho)</span>
-<span class="source-line-no">106</span><span id="line-106">        Command vCommand = this.aParser.getCommand( pCommandLine );</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">        if ( vCommand.isUnknown() ) {</span>
-<span class="source-line-no">109</span><span id="line-109">            this.aGui.println( "I don't know what you mean..." );</span>
-<span class="source-line-no">110</span><span id="line-110">            return;</span>
-<span class="source-line-no">111</span><span id="line-111">        }</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">        String vCommandWord = vCommand.getCommandWord();</span>
-<span class="source-line-no">114</span><span id="line-114">        </span>
-<span class="source-line-no">115</span><span id="line-115">        if ( vCommandWord.equals( "help" ) ) {</span>
-<span class="source-line-no">116</span><span id="line-116">            this.printHelp();</span>
-<span class="source-line-no">117</span><span id="line-117">        }</span>
-<span class="source-line-no">118</span><span id="line-118">        else if ( vCommandWord.equals( "go" ) ) {</span>
-<span class="source-line-no">119</span><span id="line-119">            this.goRoom( vCommand );</span>
-<span class="source-line-no">120</span><span id="line-120">        }</span>
-<span class="source-line-no">121</span><span id="line-121">        else if ( vCommandWord.equals( "look" ) ) {</span>
-<span class="source-line-no">122</span><span id="line-122">            this.look();</span>
-<span class="source-line-no">123</span><span id="line-123">        }</span>
-<span class="source-line-no">124</span><span id="line-124">        else if ( vCommandWord.equals( "eat" ) ) {</span>
-<span class="source-line-no">125</span><span id="line-125">            this.eat();</span>
-<span class="source-line-no">126</span><span id="line-126">        }</span>
-<span class="source-line-no">127</span><span id="line-127">        else if (vCommandWord.equals("back")){</span>
-<span class="source-line-no">128</span><span id="line-128">            this.back(vCommand);</span>
-<span class="source-line-no">129</span><span id="line-129">        }</span>
-<span class="source-line-no">130</span><span id="line-130">        else if ( vCommandWord.equals( "quit" ) ) {</span>
-<span class="source-line-no">131</span><span id="line-131">            if ( vCommand.hasSecondWord() )</span>
-<span class="source-line-no">132</span><span id="line-132">                this.aGui.println( "Quit what?" );</span>
-<span class="source-line-no">133</span><span id="line-133">            else</span>
-<span class="source-line-no">134</span><span id="line-134">                this.endGame();</span>
-<span class="source-line-no">135</span><span id="line-135">        }</span>
-<span class="source-line-no">136</span><span id="line-136">    } // interpretCommand(.)</span>
-<span class="source-line-no">137</span><span id="line-137"></span>
-<span class="source-line-no">138</span><span id="line-138">    </span>
-<span class="source-line-no">139</span><span id="line-139">    </span>
-<span class="source-line-no">140</span><span id="line-140">    </span>
+<span class="source-line-no">096</span><span id="line-96">        vPlaine.setExit("west", vTemple);</span>
+<span class="source-line-no">097</span><span id="line-97">        vPlaine.setExit("up", vTour);</span>
+<span class="source-line-no">098</span><span id="line-98">        </span>
+<span class="source-line-no">099</span><span id="line-99">        vSanctuaire.setExit("north", vTemple);</span>
+<span class="source-line-no">100</span><span id="line-100">        vSanctuaire.setExit("down", vForge);</span>
+<span class="source-line-no">101</span><span id="line-101">        </span>
+<span class="source-line-no">102</span><span id="line-102">        vForge.setExit("north", vSanctuaire);</span>
+<span class="source-line-no">103</span><span id="line-103">        </span>
+<span class="source-line-no">104</span><span id="line-104">        // Initialisation des Items</span>
+<span class="source-line-no">105</span><span id="line-105">        // Village</span>
+<span class="source-line-no">106</span><span id="line-106">        vVillage.addItem(new Item("livre", "un vieux livre poussiéreux laissé par l'Érudit", 1.2));</span>
+<span class="source-line-no">107</span><span id="line-107">        vVillage.addItem(new Item("epee", "une vieille épée d'entraînement brisée", 2.0));</span>
+<span class="source-line-no">108</span><span id="line-108">        // Forêt</span>
+<span class="source-line-no">109</span><span id="line-109">        </span>
+<span class="source-line-no">110</span><span id="line-110">        vForet.addItem(new Item("herbes", "des herbes médicinales luminescentes", 0.5));</span>
+<span class="source-line-no">111</span><span id="line-111"></span>
+<span class="source-line-no">112</span><span id="line-112">        // Ruines (Gemme 1)</span>
+<span class="source-line-no">113</span><span id="line-113">        vRuines.addItem(new Item("gemme1", "la Gemme de Force (Rouge)", 1.0));</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">        // Rivière</span>
+<span class="source-line-no">116</span><span id="line-116">        vRiviere.addItem(new Item("coffre", "un petit coffre verrouillé échoué sur la rive", 3.0));</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">        // Caverne (Gemme 2)</span>
+<span class="source-line-no">119</span><span id="line-119">        vCaverne.addItem(new Item("gemme2", "la Gemme de l'Esprit (Bleue)", 1.0));</span>
+<span class="source-line-no">120</span><span id="line-120">        </span>
+<span class="source-line-no">121</span><span id="line-121">        // Temple (Gemme 3)</span>
+<span class="source-line-no">122</span><span id="line-122">        vTemple.addItem(new Item("gemme3", "la Gemme du Courage (Verte)", 1.0));</span>
+<span class="source-line-no">123</span><span id="line-123">        </span>
+<span class="source-line-no">124</span><span id="line-124">        // Plaine</span>
+<span class="source-line-no">125</span><span id="line-125">        vPlaine.addItem(new Item("bouclier", "un bouclier de soldat abandonné", 4.5));</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">        // Forge</span>
+<span class="source-line-no">128</span><span id="line-128">        vForge.addItem(new Item("socle", "le socle sacré de l'épée des âmes", 50.0));</span>
+<span class="source-line-no">129</span><span id="line-129">        </span>
+<span class="source-line-no">130</span><span id="line-130">        this.aPlayer = new Player ("Hero", vVillage);</span>
+<span class="source-line-no">131</span><span id="line-131">    } // createRooms()</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">    /**</span>
+<span class="source-line-no">134</span><span id="line-134">     * Interprète la commande donnée (exécutée par l'interface graphique).</span>
+<span class="source-line-no">135</span><span id="line-135">     * @param pCommandLine La chaîne de commande tapée par le joueur.</span>
+<span class="source-line-no">136</span><span id="line-136">     */</span>
+<span class="source-line-no">137</span><span id="line-137">    public void interpretCommand( final String pCommandLine ) </span>
+<span class="source-line-no">138</span><span id="line-138">    {</span>
+<span class="source-line-no">139</span><span id="line-139">        this.aGui.println( "&gt; " + pCommandLine ); </span>
+<span class="source-line-no">140</span><span id="line-140">        Command vCommand = this.aParser.getCommand( pCommandLine );</span>
 <span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">    /**</span>
-<span class="source-line-no">143</span><span id="line-143">     * Affiche les informations sur le lieu courant (description + image).</span>
-<span class="source-line-no">144</span><span id="line-144">     */</span>
-<span class="source-line-no">145</span><span id="line-145">    private void printLocationInfo()</span>
-<span class="source-line-no">146</span><span id="line-146">    {</span>
-<span class="source-line-no">147</span><span id="line-147">        this.aGui.println( this.aCurrentRoom.getLongDescription() );</span>
+<span class="source-line-no">142</span><span id="line-142">        if ( vCommand.isUnknown() ) {</span>
+<span class="source-line-no">143</span><span id="line-143">            this.aGui.println( "I don't know what you mean..." );</span>
+<span class="source-line-no">144</span><span id="line-144">            return;</span>
+<span class="source-line-no">145</span><span id="line-145">        }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">        String vCommandWord = vCommand.getCommandWord();</span>
 <span class="source-line-no">148</span><span id="line-148">        </span>
-<span class="source-line-no">149</span><span id="line-149">        // Affiche l'image si elle existe</span>
-<span class="source-line-no">150</span><span id="line-150">        if ( this.aCurrentRoom.getImageName() != null ) {</span>
-<span class="source-line-no">151</span><span id="line-151">            this.aGui.showImage( this.aCurrentRoom.getImageName() );</span>
-<span class="source-line-no">152</span><span id="line-152">        }</span>
-<span class="source-line-no">153</span><span id="line-153">    } // printLocationInfo()</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">    /**</span>
-<span class="source-line-no">156</span><span id="line-156">     * Commande 'look'.</span>
-<span class="source-line-no">157</span><span id="line-157">     */</span>
-<span class="source-line-no">158</span><span id="line-158">    private void look()</span>
-<span class="source-line-no">159</span><span id="line-159">    {</span>
-<span class="source-line-no">160</span><span id="line-160">        this.printLocationInfo();</span>
-<span class="source-line-no">161</span><span id="line-161">    } // look()</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">    /**</span>
-<span class="source-line-no">164</span><span id="line-164">     * Commande 'eat'.</span>
-<span class="source-line-no">165</span><span id="line-165">     */</span>
-<span class="source-line-no">166</span><span id="line-166">    private void eat()</span>
-<span class="source-line-no">167</span><span id="line-167">    {</span>
-<span class="source-line-no">168</span><span id="line-168">        this.aGui.println("Vous avez mangé, vous êtes désormais rassasié.");</span>
-<span class="source-line-no">169</span><span id="line-169">    } // eat()</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">    /**</span>
-<span class="source-line-no">172</span><span id="line-172">     * Commande 'help'.</span>
-<span class="source-line-no">173</span><span id="line-173">     */</span>
-<span class="source-line-no">174</span><span id="line-174">    private void printHelp() </span>
-<span class="source-line-no">175</span><span id="line-175">    {</span>
-<span class="source-line-no">176</span><span id="line-176">        this.aGui.println( "Vous êtes perdu. Vous êtes seul." );</span>
-<span class="source-line-no">177</span><span id="line-177">        this.aGui.println( "Vous errez dans le royaume d'Aelyndor." + "\n" );</span>
-<span class="source-line-no">178</span><span id="line-178">        this.aGui.println( "Vos commandes sont : " + this.aParser.getCommandList() );</span>
-<span class="source-line-no">179</span><span id="line-179">    } // printHelp()</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181">    /**</span>
-<span class="source-line-no">182</span><span id="line-182">     * Commande 'go'.</span>
-<span class="source-line-no">183</span><span id="line-183">     */</span>
-<span class="source-line-no">184</span><span id="line-184">    private void goRoom( final Command pCommand ) </span>
-<span class="source-line-no">185</span><span id="line-185">    {</span>
-<span class="source-line-no">186</span><span id="line-186">        </span>
-<span class="source-line-no">187</span><span id="line-187">        if ( ! pCommand.hasSecondWord() ) {</span>
-<span class="source-line-no">188</span><span id="line-188">            this.aGui.println( "Go where?" );</span>
-<span class="source-line-no">189</span><span id="line-189">            return;</span>
-<span class="source-line-no">190</span><span id="line-190">        }</span>
-<span class="source-line-no">191</span><span id="line-191"></span>
-<span class="source-line-no">192</span><span id="line-192">        String vDirection = pCommand.getSecondWord();</span>
-<span class="source-line-no">193</span><span id="line-193">        Room vNextRoom = this.aCurrentRoom.getExit( vDirection );</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">        if ( vNextRoom == null ) {</span>
-<span class="source-line-no">196</span><span id="line-196">            this.aGui.println( "There is no door!" );</span>
-<span class="source-line-no">197</span><span id="line-197">        }</span>
-<span class="source-line-no">198</span><span id="line-198">        else {</span>
-<span class="source-line-no">199</span><span id="line-199">            this.aPrevRooms.push(this.aCurrentRoom);</span>
-<span class="source-line-no">200</span><span id="line-200">            this.aCurrentRoom = vNextRoom;</span>
-<span class="source-line-no">201</span><span id="line-201">            this.printLocationInfo();</span>
-<span class="source-line-no">202</span><span id="line-202">        }</span>
-<span class="source-line-no">203</span><span id="line-203">    } // goRoom(.)</span>
-<span class="source-line-no">204</span><span id="line-204"></span>
-<span class="source-line-no">205</span><span id="line-205">    /**</span>
-<span class="source-line-no">206</span><span id="line-206">     * Termine le jeu (appelé par 'quit').</span>
-<span class="source-line-no">207</span><span id="line-207">     */</span>
-<span class="source-line-no">208</span><span id="line-208">    private void endGame()</span>
-<span class="source-line-no">209</span><span id="line-209">    {</span>
-<span class="source-line-no">210</span><span id="line-210">        this.aGui.println( "Thank you for playing.  Good bye." );</span>
-<span class="source-line-no">211</span><span id="line-211">        this.aGui.enable( false ); // Désactive la zone de saisie</span>
-<span class="source-line-no">212</span><span id="line-212">    } // endGame()</span>
-<span class="source-line-no">213</span><span id="line-213">    </span>
-<span class="source-line-no">214</span><span id="line-214">    /**</span>
-<span class="source-line-no">215</span><span id="line-215">     * commande 'back'.</span>
-<span class="source-line-no">216</span><span id="line-216">     * Permet de revenir à la pièce précédente.</span>
-<span class="source-line-no">217</span><span id="line-217">     * @param pCommand La commande saisie par l'utilisateur.</span>
-<span class="source-line-no">218</span><span id="line-218">     */</span>
-<span class="source-line-no">219</span><span id="line-219">    private void back(final Command pCommand)</span>
-<span class="source-line-no">220</span><span id="line-220">    {</span>
-<span class="source-line-no">221</span><span id="line-221">        if (pCommand.hasSecondWord()){</span>
-<span class="source-line-no">222</span><span id="line-222">            this.aGui.println("back where?");</span>
-<span class="source-line-no">223</span><span id="line-223">            return;</span>
-<span class="source-line-no">224</span><span id="line-224">        }</span>
-<span class="source-line-no">225</span><span id="line-225">        if(this.aPrevRooms.isEmpty()){</span>
-<span class="source-line-no">226</span><span id="line-226">            this.aGui.println("retour en arrière impossible");</span>
-<span class="source-line-no">227</span><span id="line-227">            return ;</span>
-<span class="source-line-no">228</span><span id="line-228">            </span>
-<span class="source-line-no">229</span><span id="line-229">        }</span>
-<span class="source-line-no">230</span><span id="line-230">        Room vPrevRoom = this.aPrevRooms.pop();</span>
-<span class="source-line-no">231</span><span id="line-231">        this.aCurrentRoom = vPrevRoom;</span>
-<span class="source-line-no">232</span><span id="line-232">        this.printLocationInfo();</span>
-<span class="source-line-no">233</span><span id="line-233">    }</span>
-<span class="source-line-no">234</span><span id="line-234">} // GameEngine</span>
+<span class="source-line-no">149</span><span id="line-149">        if ( vCommandWord.equals( "help" ) ) {</span>
+<span class="source-line-no">150</span><span id="line-150">            this.printHelp();</span>
+<span class="source-line-no">151</span><span id="line-151">        }</span>
+<span class="source-line-no">152</span><span id="line-152">        else if ( vCommandWord.equals( "go" ) ) {</span>
+<span class="source-line-no">153</span><span id="line-153">            this.goRoom( vCommand );</span>
+<span class="source-line-no">154</span><span id="line-154">        }</span>
+<span class="source-line-no">155</span><span id="line-155">        else if ( vCommandWord.equals( "look" ) ) {</span>
+<span class="source-line-no">156</span><span id="line-156">            this.look();</span>
+<span class="source-line-no">157</span><span id="line-157">        }</span>
+<span class="source-line-no">158</span><span id="line-158">        else if ( vCommandWord.equals( "eat" ) ) {</span>
+<span class="source-line-no">159</span><span id="line-159">            this.eat();</span>
+<span class="source-line-no">160</span><span id="line-160">        }</span>
+<span class="source-line-no">161</span><span id="line-161">        else if (vCommandWord.equals("back")){</span>
+<span class="source-line-no">162</span><span id="line-162">            this.back(vCommand);</span>
+<span class="source-line-no">163</span><span id="line-163">        }</span>
+<span class="source-line-no">164</span><span id="line-164">        else if ( vCommandWord.equals( "quit" ) ) {</span>
+<span class="source-line-no">165</span><span id="line-165">            if ( vCommand.hasSecondWord() )</span>
+<span class="source-line-no">166</span><span id="line-166">                this.aGui.println( "Quit what?" );</span>
+<span class="source-line-no">167</span><span id="line-167">            else</span>
+<span class="source-line-no">168</span><span id="line-168">                this.endGame();</span>
+<span class="source-line-no">169</span><span id="line-169">        }</span>
+<span class="source-line-no">170</span><span id="line-170">        else if (vCommandWord.equals("test")){</span>
+<span class="source-line-no">171</span><span id="line-171">            this.test(vCommand);</span>
+<span class="source-line-no">172</span><span id="line-172">        }</span>
+<span class="source-line-no">173</span><span id="line-173">        else if (vCommandWord.equals("take")){</span>
+<span class="source-line-no">174</span><span id="line-174">            this.take(vCommand);</span>
+<span class="source-line-no">175</span><span id="line-175">        }</span>
+<span class="source-line-no">176</span><span id="line-176">        else if (vCommandWord.equals("drop"))</span>
+<span class="source-line-no">177</span><span id="line-177">        {</span>
+<span class="source-line-no">178</span><span id="line-178">            this.drop(vCommand);</span>
+<span class="source-line-no">179</span><span id="line-179">        }</span>
+<span class="source-line-no">180</span><span id="line-180">        else if (vCommandWord.equals("items"))</span>
+<span class="source-line-no">181</span><span id="line-181">        {</span>
+<span class="source-line-no">182</span><span id="line-182">            this.items(vCommand);</span>
+<span class="source-line-no">183</span><span id="line-183">        }</span>
+<span class="source-line-no">184</span><span id="line-184">        </span>
+<span class="source-line-no">185</span><span id="line-185">    } // interpretCommand(.)</span>
+<span class="source-line-no">186</span><span id="line-186">    </span>
+<span class="source-line-no">187</span><span id="line-187">    /**</span>
+<span class="source-line-no">188</span><span id="line-188">     * Affiche les informations sur le lieu courant (description + image).</span>
+<span class="source-line-no">189</span><span id="line-189">     */</span>
+<span class="source-line-no">190</span><span id="line-190">    private void printLocationInfo()</span>
+<span class="source-line-no">191</span><span id="line-191">    {</span>
+<span class="source-line-no">192</span><span id="line-192">        this.aGui.println( this.aPlayer.getCurrentRoom().getLongDescription() );</span>
+<span class="source-line-no">193</span><span id="line-193">        // Affiche l'image si elle existe</span>
+<span class="source-line-no">194</span><span id="line-194">        if ( this.aPlayer.getCurrentRoom().getImageName() != null ) {</span>
+<span class="source-line-no">195</span><span id="line-195">            this.aGui.showImage( this.aPlayer.getCurrentRoom().getImageName() );</span>
+<span class="source-line-no">196</span><span id="line-196">        }</span>
+<span class="source-line-no">197</span><span id="line-197">    } // printLocationInfo()</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">    /**</span>
+<span class="source-line-no">200</span><span id="line-200">     * Commande 'look'.</span>
+<span class="source-line-no">201</span><span id="line-201">     */</span>
+<span class="source-line-no">202</span><span id="line-202">    private void look()</span>
+<span class="source-line-no">203</span><span id="line-203">    {</span>
+<span class="source-line-no">204</span><span id="line-204">        this.printLocationInfo();</span>
+<span class="source-line-no">205</span><span id="line-205">    } // look()</span>
+<span class="source-line-no">206</span><span id="line-206"></span>
+<span class="source-line-no">207</span><span id="line-207">    /**</span>
+<span class="source-line-no">208</span><span id="line-208">     * Commande 'eat'.</span>
+<span class="source-line-no">209</span><span id="line-209">     */</span>
+<span class="source-line-no">210</span><span id="line-210">    private void eat()</span>
+<span class="source-line-no">211</span><span id="line-211">    {</span>
+<span class="source-line-no">212</span><span id="line-212">        this.aGui.println("Vous avez mangé, vous êtes désormais rassasié.");</span>
+<span class="source-line-no">213</span><span id="line-213">    } // eat()</span>
+<span class="source-line-no">214</span><span id="line-214"></span>
+<span class="source-line-no">215</span><span id="line-215">    /**</span>
+<span class="source-line-no">216</span><span id="line-216">     * Commande 'help'.</span>
+<span class="source-line-no">217</span><span id="line-217">     */</span>
+<span class="source-line-no">218</span><span id="line-218">    private void printHelp() </span>
+<span class="source-line-no">219</span><span id="line-219">    {</span>
+<span class="source-line-no">220</span><span id="line-220">        this.aGui.println( "Vous êtes perdu. Vous êtes seul." );</span>
+<span class="source-line-no">221</span><span id="line-221">        this.aGui.println( "Vous errez dans le royaume d'Aelyndor." + "\n" );</span>
+<span class="source-line-no">222</span><span id="line-222">        this.aGui.println( "Vos commandes sont : " + this.aParser.getCommandList() );</span>
+<span class="source-line-no">223</span><span id="line-223">    } // printHelp()</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">    /**</span>
+<span class="source-line-no">226</span><span id="line-226">     * Commande 'go'.</span>
+<span class="source-line-no">227</span><span id="line-227">     */</span>
+<span class="source-line-no">228</span><span id="line-228">    private void goRoom( final Command pCommand ) </span>
+<span class="source-line-no">229</span><span id="line-229">    {</span>
+<span class="source-line-no">230</span><span id="line-230">        </span>
+<span class="source-line-no">231</span><span id="line-231">        if ( ! pCommand.hasSecondWord() ) {</span>
+<span class="source-line-no">232</span><span id="line-232">            this.aGui.println( "Go where?" );</span>
+<span class="source-line-no">233</span><span id="line-233">            return;</span>
+<span class="source-line-no">234</span><span id="line-234">        }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">        String vDirection = pCommand.getSecondWord();</span>
+<span class="source-line-no">237</span><span id="line-237">        Room vNextRoom = this.aPlayer.getCurrentRoom().getExit( vDirection );</span>
+<span class="source-line-no">238</span><span id="line-238"></span>
+<span class="source-line-no">239</span><span id="line-239">        if ( vNextRoom == null ) {</span>
+<span class="source-line-no">240</span><span id="line-240">            this.aGui.println( "There is no door!" );</span>
+<span class="source-line-no">241</span><span id="line-241">        }</span>
+<span class="source-line-no">242</span><span id="line-242">        else {</span>
+<span class="source-line-no">243</span><span id="line-243">            this.aPlayer.move(vNextRoom);</span>
+<span class="source-line-no">244</span><span id="line-244">            this.printLocationInfo();</span>
+<span class="source-line-no">245</span><span id="line-245">        }</span>
+<span class="source-line-no">246</span><span id="line-246">    } // goRoom(.)</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">    /**</span>
+<span class="source-line-no">249</span><span id="line-249">     * Termine le jeu (appelé par 'quit').</span>
+<span class="source-line-no">250</span><span id="line-250">     */</span>
+<span class="source-line-no">251</span><span id="line-251">    private void endGame()</span>
+<span class="source-line-no">252</span><span id="line-252">    {</span>
+<span class="source-line-no">253</span><span id="line-253">        this.aGui.println( "Thank you for playing.  Good bye." );</span>
+<span class="source-line-no">254</span><span id="line-254">        this.aGui.enable( false ); // Désactive la zone de saisie</span>
+<span class="source-line-no">255</span><span id="line-255">    } // endGame()</span>
+<span class="source-line-no">256</span><span id="line-256">    </span>
+<span class="source-line-no">257</span><span id="line-257">    /**</span>
+<span class="source-line-no">258</span><span id="line-258">     * commande 'back'.</span>
+<span class="source-line-no">259</span><span id="line-259">     * Permet de revenir à la pièce précédente.</span>
+<span class="source-line-no">260</span><span id="line-260">     * @param pCommand La commande saisie par l'utilisateur.</span>
+<span class="source-line-no">261</span><span id="line-261">     */</span>
+<span class="source-line-no">262</span><span id="line-262">    private void back(final Command pCommand)</span>
+<span class="source-line-no">263</span><span id="line-263">    {</span>
+<span class="source-line-no">264</span><span id="line-264">        if (pCommand.hasSecondWord()){</span>
+<span class="source-line-no">265</span><span id="line-265">            this.aGui.println("back where?");</span>
+<span class="source-line-no">266</span><span id="line-266">            return;</span>
+<span class="source-line-no">267</span><span id="line-267">        }</span>
+<span class="source-line-no">268</span><span id="line-268">        </span>
+<span class="source-line-no">269</span><span id="line-269">        if (this.aPlayer.canGoBack()){</span>
+<span class="source-line-no">270</span><span id="line-270">            this.aPlayer.back();</span>
+<span class="source-line-no">271</span><span id="line-271">            this.printLocationInfo();</span>
+<span class="source-line-no">272</span><span id="line-272">        }</span>
+<span class="source-line-no">273</span><span id="line-273">        else{</span>
+<span class="source-line-no">274</span><span id="line-274">            this.aGui.println("Retour en arriere imporssible");</span>
+<span class="source-line-no">275</span><span id="line-275">        }</span>
+<span class="source-line-no">276</span><span id="line-276">    }</span>
+<span class="source-line-no">277</span><span id="line-277">    </span>
+<span class="source-line-no">278</span><span id="line-278">    /**</span>
+<span class="source-line-no">279</span><span id="line-279">     * Exécute une série de commandes lues depuis un fichier texte.</span>
+<span class="source-line-no">280</span><span id="line-280">     * @param pCommand La commande contenant le nom du fichier.</span>
+<span class="source-line-no">281</span><span id="line-281">     */</span>
+<span class="source-line-no">282</span><span id="line-282">    private void test(final Command pCommand)</span>
+<span class="source-line-no">283</span><span id="line-283">    {</span>
+<span class="source-line-no">284</span><span id="line-284">        if(!pCommand.hasSecondWord()){</span>
+<span class="source-line-no">285</span><span id="line-285">            this.aGui.println("test what?");</span>
+<span class="source-line-no">286</span><span id="line-286">            return;</span>
+<span class="source-line-no">287</span><span id="line-287">        }</span>
+<span class="source-line-no">288</span><span id="line-288">        </span>
+<span class="source-line-no">289</span><span id="line-289">        String vFileName = pCommand.getSecondWord();</span>
+<span class="source-line-no">290</span><span id="line-290">        try {</span>
+<span class="source-line-no">291</span><span id="line-291">            Scanner vScanner = new Scanner(new File(vFileName));</span>
+<span class="source-line-no">292</span><span id="line-292">            this.aGui.println(" test "+ vFileName +" :");</span>
+<span class="source-line-no">293</span><span id="line-293">            while (vScanner.hasNextLine()){</span>
+<span class="source-line-no">294</span><span id="line-294">                String vLine = vScanner.nextLine();</span>
+<span class="source-line-no">295</span><span id="line-295">                this.interpretCommand(vLine);</span>
+<span class="source-line-no">296</span><span id="line-296">            }</span>
+<span class="source-line-no">297</span><span id="line-297">            vScanner.close();</span>
+<span class="source-line-no">298</span><span id="line-298">            this.aGui.println("  Test fini ");</span>
+<span class="source-line-no">299</span><span id="line-299">        }</span>
+<span class="source-line-no">300</span><span id="line-300">        catch (FileNotFoundException pExpeption){</span>
+<span class="source-line-no">301</span><span id="line-301">            this.aGui.println("Fichier non trouvé : "+ vFileName);</span>
+<span class="source-line-no">302</span><span id="line-302">        }</span>
+<span class="source-line-no">303</span><span id="line-303">    }</span>
+<span class="source-line-no">304</span><span id="line-304">    private void take(final Command pCommand)</span>
+<span class="source-line-no">305</span><span id="line-305">    {</span>
+<span class="source-line-no">306</span><span id="line-306">        if(!pCommand.hasSecondWord()){</span>
+<span class="source-line-no">307</span><span id="line-307">            this.aGui.println("take what?");</span>
+<span class="source-line-no">308</span><span id="line-308">            return;</span>
+<span class="source-line-no">309</span><span id="line-309">        }</span>
+<span class="source-line-no">310</span><span id="line-310">        </span>
+<span class="source-line-no">311</span><span id="line-311">        String vItem = pCommand.getSecondWord();</span>
+<span class="source-line-no">312</span><span id="line-312">        Item vItemInRoom = this.aPlayer .getCurrentRoom().getItem(vItem);</span>
+<span class="source-line-no">313</span><span id="line-313">        if(vItem == null){</span>
+<span class="source-line-no">314</span><span id="line-314">            this.aGui.println(vItem + " n'est pas present dans cette pièce");</span>
+<span class="source-line-no">315</span><span id="line-315">            return;</span>
+<span class="source-line-no">316</span><span id="line-316">        }</span>
+<span class="source-line-no">317</span><span id="line-317">        this.aPlayer.take(vItem);</span>
+<span class="source-line-no">318</span><span id="line-318">        this.aGui.println("vous aves ramassé : "+ vItem);</span>
+<span class="source-line-no">319</span><span id="line-319">    }</span>
+<span class="source-line-no">320</span><span id="line-320">    </span>
+<span class="source-line-no">321</span><span id="line-321">    private void drop(final Command pCommand)</span>
+<span class="source-line-no">322</span><span id="line-322">    {</span>
+<span class="source-line-no">323</span><span id="line-323">        if (!pCommand.hasSecondWord()) {</span>
+<span class="source-line-no">324</span><span id="line-324">            this.aGui.println("drop what?");</span>
+<span class="source-line-no">325</span><span id="line-325">            return;</span>
+<span class="source-line-no">326</span><span id="line-326">        }</span>
+<span class="source-line-no">327</span><span id="line-327">        String vItem = pCommand.getSecondWord();</span>
+<span class="source-line-no">328</span><span id="line-328">        Item vItemCarried = this.aPlayer.getItem(vItem);</span>
+<span class="source-line-no">329</span><span id="line-329"></span>
+<span class="source-line-no">330</span><span id="line-330">      </span>
+<span class="source-line-no">331</span><span id="line-331">        if (vItemCarried == null) {</span>
+<span class="source-line-no">332</span><span id="line-332">            this.aGui.println("Vous ne portez pas d'objet");</span>
+<span class="source-line-no">333</span><span id="line-333">            return;</span>
+<span class="source-line-no">334</span><span id="line-334">        }</span>
+<span class="source-line-no">335</span><span id="line-335">        this.aPlayer.drop(vItem);</span>
+<span class="source-line-no">336</span><span id="line-336">        this.aGui.println("Vous avez posé : "+vItem);</span>
+<span class="source-line-no">337</span><span id="line-337">    }</span>
+<span class="source-line-no">338</span><span id="line-338">    private void items (final Command pCommand)</span>
+<span class="source-line-no">339</span><span id="line-339">    {</span>
+<span class="source-line-no">340</span><span id="line-340">        this.aGui.println(this.aPlayer.getInventoryString());</span>
+<span class="source-line-no">341</span><span id="line-341">    }</span>
+<span class="source-line-no">342</span><span id="line-342">} // GameEngine</span>
 
 
 

@@ -113,7 +113,7 @@ public class Player
     
     public String getInventoryString()
     {
-        return "Inventaire : "+ this.aInventory.getItemsString();
+        return "Inventaire : "+ this.aInventory.getItemsString()+" \n Poid total : "+ this.aInventory.getTotalWeight();
     }
     public double getMaxWeight()
     {

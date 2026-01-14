@@ -107,7 +107,7 @@ public class GameEngine
         vVillage.addItem(new Item("epee", "une vieille épée d'entraînement brisée", 2.0));
         // Forêt
         
-        vForet.addItem(new Item("herbes", "des herbes médicinales luminescentes", 0.5));
+        vForet.addItem(new Item("herbes", "des herbes médicinales luminescentes qui senbles donner des forces", 0.5));
 
         // Ruines (Gemme 1)
         vRuines.addItem(new Item("gemme1", "la Gemme de Force (Rouge)", 1.0));
@@ -156,7 +156,7 @@ public class GameEngine
             this.look();
         }
         else if ( vCommandWord.equals( "eat" ) ) {
-            this.eat();
+            this.eat(vCommand);
         }
         else if (vCommandWord.equals("back")){
             this.back(vCommand);
@@ -207,9 +207,13 @@ public class GameEngine
     /**
      * Commande 'eat'.
      */
-    private void eat()
+    private void eat(final Command pCommand)
     {
-        this.aGui.println("Vous avez mangé, vous êtes désormais rassasié.");
+        if (!pCommand.hasSecondWord()){
+            this.aGui.println("Manger quoi ?");
+        }
+        String vManger = this.aPlayer.eat(pCommand.getSecondWord());
+        this.aGui.println(vManger);
     } // eat()
 
     /**

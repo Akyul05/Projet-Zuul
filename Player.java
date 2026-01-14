@@ -119,4 +119,20 @@ public class Player
     {
         return this.aMaxWeight;
     }
+    public String eat(final String pItem)
+    {
+        Item vItem = this.aInventory.getItem(pItem);
+        if(vItem== null){
+            return("cet objet est introuvable dans l'inventaire.");
+            
+        }
+        if (pItem.equals("herbes")){
+            this.aInventory.removeItem(pItem);
+            this.aMaxWeight = this.aMaxWeight * 4;
+            return("vous avez consommé les herbes medicinales , vous vous sentez plus fort");
+        }
+        else{
+            return pItem+ "n'est pas consommable.";
+        }
+    }
 }

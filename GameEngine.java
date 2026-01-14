@@ -19,6 +19,8 @@ public class GameEngine
     private Parser        aParser;
     private UserInterface aGui;
     private Player aPlayer;
+    private int aChrono;
+    private int aTime = 50;
     /**
      * Constructeur pour les objets de la classe GameEngine.
      * Crée le parseur et la carte du jeu.
@@ -27,6 +29,7 @@ public class GameEngine
     {
         this.aParser = new Parser();
         this.createRooms();
+        this.aChrono = 0;
     } // GameEngine()
 
     /**
@@ -182,6 +185,14 @@ public class GameEngine
             this.items(vCommand);
         }
         
+        if (!vCommandWord.equals("quit")){
+            this.aChrono++;
+        }
+        if(this.aChrono >= aTime){
+            this.aGui.println("TEMPS ECOULE ");
+            this.aGui.println("Aelyndor sombre dans les tenebres");
+            this.endGame();
+        }
     } // interpretCommand(.)
     
     /**
@@ -190,6 +201,8 @@ public class GameEngine
     private void printLocationInfo()
     {
         this.aGui.println( this.aPlayer.getCurrentRoom().getLongDescription() );
+        int vTempRestant = aTime - this.aChrono;
+        this.aGui.println("Temps restant :"+ vTempRestant);
         // Affiche l'image si elle existe
         if ( this.aPlayer.getCurrentRoom().getImageName() != null ) {
             this.aGui.showImage( this.aPlayer.getCurrentRoom().getImageName() );

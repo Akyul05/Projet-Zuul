@@ -1,0 +1,62 @@
+
+#départ
+help
+look
+items
+
+#recuperer objets du Village
+take livre
+take epee
+items
+
+# Forêt pour trouver les herbes
+go east
+look
+take herbes
+
+#utilisation Herbes
+eat herbes
+items
+
+# Ruines & Tour
+go east
+take gemme1
+go east
+look
+
+#verticalité
+go down
+look
+take bouclier
+items
+
+#Temple & Caverne
+go west
+look
+take gemme3
+go down
+look
+take gemme2
+
+#Rivière
+go up
+go north
+look
+take coffre
+items
+
+# Test back
+back
+look
+
+#fin du jeu (Sanctuaire & Forge)
+go south
+look
+go down
+look
+
+take socle #normalement impossible
+items
+
+#Fin du test
+quit

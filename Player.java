@@ -119,6 +119,11 @@ public class Player
     {
         return this.aMaxWeight;
     }
+    /**
+     * Consomme un item .
+     * @param pItem Le nom de l'item à manger.
+     * @return Une String contenant le message.
+     */
     public String eat(final String pItem)
     {
         Item vItem = this.aInventory.getItem(pItem);

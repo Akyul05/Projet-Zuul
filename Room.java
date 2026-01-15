@@ -123,5 +123,13 @@ public class Room
     {
         return this.aItems.getItemsString();
     }
-
+    /**
+     * Vérifie si la pièce passée en paramètre est une des sorties.
+     * @param pRoom Le nom de la pièce.
+     * @return true si pRoom est une sortie, false sinon.
+     */
+    public boolean isExit(final Room pRoom)
+    {
+        return this.aExits.containsValue(pRoom);
+    }
 } // Room

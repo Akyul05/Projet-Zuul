@@ -23,7 +23,7 @@ public class Player
        this.aCurrentRoom= pCurrentRoom;
        this.aPrevRooms = new Stack<Room>();
        this.aInventory = new ItemList();
-       this.aMaxWeight = 2.0;
+       this.aMaxWeight = 4.0;
     }
     /**
      * Accesseur de la pièce courante.
@@ -48,7 +48,12 @@ public class Player
      */
     public void move(final Room pNextRoom)
     {
-        this.aPrevRooms.push(this.aCurrentRoom);
+        if(pNextRoom.isExit(this.aCurrentRoom)){
+            this.aPrevRooms.push(this.aCurrentRoom);
+        }
+        else {
+            this.aPrevRooms.clear();
+        }
         this.aCurrentRoom= pNextRoom;
     }
     /**
@@ -140,4 +145,39 @@ public class Player
             return pItem+ "n'est pas consommable.";
         }
     }
+    
+    public String charge(final String pItem)
+    {
+        Item vItem = this.aInventory.getItem(pItem);
+        
+        if (vItem instanceof Beamer){
+            Beamer vBeamer = (Beamer) vItem;
+            vBeamer.charge(this.aCurrentRoom);
+            return("Vous avez mémorisé cette piece dans le beamer, declanchez le pour y revenir");
+            
+        }
+        
+        else{
+            return ("impossible de charger cet objet ");
+        }
+    }
+    public String fire(final String pItem)
+    {
+        Item vItem = this.aInventory.getItem(pItem);
+        if (vItem instanceof Beamer){
+            Beamer vBeamer = (Beamer) vItem;
+            if(!vBeamer.isCharged()){
+                return ("le beamer n'est pas chargé");
+            }
+            
+            Room vRoomTP = vBeamer.fire();
+            this.aCurrentRoom = vRoomTP;
+            return ("Vous vous etes teleporté ");
+            
+    }
+    else {
+                return ("vous ne pouvez pas utiliser cet objet");
+            }
+}
+
 }

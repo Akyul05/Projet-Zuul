@@ -94,7 +94,7 @@ public class GameEngine
         vTemple.setExit("east", vPlaine);
         vTemple.setExit("south", vSanctuaire);
         
-        vCaverne.setExit("up", vTemple);
+        //vCaverne.setExit("up", vTemple);
         
         vPlaine.setExit("west", vTemple);
         vPlaine.setExit("up", vTour);
@@ -130,6 +130,8 @@ public class GameEngine
         // Forge
         vForge.addItem(new Item("socle", "le socle sacré de l'épée des âmes", 50.0));
         
+        Item vBeamer = new Beamer("beamer","entregistre la piece actuelle et vous permet d'y revenir une fois declanché",2.5);
+        vTemple.addItem(vBeamer);
         this.aPlayer = new Player ("Hero", vVillage);
     } // createRooms()
 
@@ -183,6 +185,12 @@ public class GameEngine
         else if (vCommandWord.equals("items"))
         {
             this.items(vCommand);
+        }
+        else if (vCommandWord.equals("charge")) {
+            this.charge(vCommand);
+        }
+        else if (vCommandWord.equals("fire")) {
+            this.fire(vCommand);
         }
         
         if (!vCommandWord.equals("quit")){
@@ -336,7 +344,7 @@ public class GameEngine
             this.aGui.println("Vous avez ramassé : " + vItem);
         }
         else {
-            this.aGui.println("Trop lourd !! (capacité :)"+ this.aPlayer.getMaxWeight()+ "kg)");
+            this.aGui.println("Trop lourd !! (capacité :)"+ this.aPlayer.getMaxWeight()+ "kg)"+"\n consommez des herbes medicinales pour augmenter votre capacité");
         }
         
     }
@@ -362,4 +370,25 @@ public class GameEngine
     {
         this.aGui.println(this.aPlayer.getInventoryString());
     }
-} // GameEngine
+    
+    private void charge(final Command pCommand)
+    {
+        if (!pCommand.hasSecondWord()) {
+            this.aGui.println("charger quoi");
+            return;
+        }
+        
+        String vCharge = this.aPlayer.charge(pCommand.getSecondWord());
+        this.aGui.println(vCharge);
+    }
+    private void fire(final Command pCommand)
+    {
+        if (!pCommand.hasSecondWord()) {
+            this.aGui.println("declancher quoi?");
+            return;
+        }
+        String vFire = this.aPlayer.fire(pCommand.getSecondWord());
+        this.aGui.println(vFire);
+        printLocationInfo();
+} 
+}// GameEngine

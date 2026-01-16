@@ -25,6 +25,10 @@ public class Player
        this.aInventory = new ItemList();
        this.aMaxWeight = 4.0;
     }
+    public boolean victoire()
+    {
+        return (this.getItem("gemme1")!=null&&this.getItem("gemme2")!=null&&this.getItem("gemme3")!=null&&this.getItem("epee")!=null);
+    }
     /**
      * Accesseur de la pièce courante.
      */

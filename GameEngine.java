@@ -143,9 +143,6 @@ public class GameEngine
         // Ruines (Gemme 1)
         vRuines.addItem(new Item("gemme1", "la Gemme de Force (Rouge)", 1.0));
 
-        // Rivière
-        vRiviere.addItem(new Item("coffre", "un petit coffre verrouillé échoué sur la rive", 3.0));
-
         // Caverne (Gemme 2)
         vCaverne.addItem(new Item("gemme2", "la Gemme de l'Esprit (Bleue)", 1.0));
         
@@ -298,6 +295,7 @@ public class GameEngine
         else {
             this.aPlayer.move(vNextRoom);
             this.printLocationInfo();
+            this.checkVictory();
         }
     } // goRoom(.)
 
@@ -449,5 +447,27 @@ public class GameEngine
                 }
             }
     
-}
+    }
+    /**
+     * Vérifie si les conditions de victoire sont réunies.
+     */
+    private void checkVictory()
+    {
+        if (this.aPlayer.getCurrentRoom().getImageName().equals("forge.png")) {
+            
+            if (this.aPlayer.victoire()) {
+                this.aGui.println("\n***************************************");
+                this.aGui.println("               VICTOIRE !                ");
+                this.aGui.println("   Vous placez les gemmes sur le socle...");
+                this.aGui.println("   L'épée des Âmes est reforgée !        ");
+                this.aGui.println("   Aelyndor est sauvé grâce à vous.      ");
+                this.aGui.println("*****************************************");
+                
+                this.endGame();
+            }
+            else {
+                this.aGui.println("Vous êtes à la Forge, mais il vous manque des éléments pour réparer l'épée...");
+            }
+        }
+    }
 }// GameEngine

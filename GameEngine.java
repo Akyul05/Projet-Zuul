@@ -25,6 +25,8 @@ public class GameEngine
     private int aChrono;
     private int aTime = 50;
     private HashMap<String , Room> aRooms;
+    private boolean aTestMode;
+    
     /**
      * Constructeur pour les objets de la classe GameEngine.
      * Crée le parseur et la carte du jeu.
@@ -35,6 +37,7 @@ public class GameEngine
         this.aRooms = new HashMap<String, Room>();
         this.createRooms();
         this.aChrono = 0;
+        this.aTestMode = false;
     } // GameEngine()
 
     /**
@@ -217,6 +220,9 @@ public class GameEngine
         else if (vCommandWord.equals("fire")) {
             this.fire(vCommand);
         }
+        else if (vCommandWord.equals("alea")){
+            this.alea(vCommand);
+        }
         
         if (!vCommandWord.equals("quit")){
             this.aChrono++;
@@ -335,6 +341,7 @@ public class GameEngine
             this.aGui.println("test what?");
             return;
         }
+        this.aTestMode = true;
         
         String vFileName = pCommand.getSecondWord();
         try {
@@ -350,6 +357,9 @@ public class GameEngine
         catch (FileNotFoundException pExpeption){
             this.aGui.println("Fichier non trouvé : "+ vFileName);
         }
+        this.aTestMode=false;
+        this.aGui.println("test fini");
+        
     }
     private void take(final Command pCommand)
     {
@@ -416,4 +426,28 @@ public class GameEngine
         this.aGui.println(vFire);
         printLocationInfo();
 } 
+    /**
+     * Commande Alea utilisable uniquement lors d'un test
+     * Force la sortie de la TransporterRoom a une destination precisé.
+     */
+    private void alea(final Command pCommand)
+    {
+        if (!this.aTestMode) {
+            this.aGui.println("Attention !! Commande réservée aux tests");
+            return;
+        }
+        Room vRoom = this.aRooms.get("CercleRunique");
+        if(vRoom instanceof TransporterRoom){
+            TransporterRoom vTransporter = (TransporterRoom) vRoom;
+            if(pCommand.hasSecondWord()){
+                String vRoomName = pCommand.getSecondWord();
+                Room vTargetRoom = this.aRooms.get(vRoomName);
+                
+                if (vTargetRoom != null){
+                    vTransporter.setAlea(vTargetRoom);
+                }
+                }
+            }
+    
+}
 }// GameEngine

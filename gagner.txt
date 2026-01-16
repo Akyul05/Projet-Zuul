@@ -1,8 +1,25 @@
-look
+take epee
+take livre
 go east
-go south
-go south
-go south
+take herbes
+eat herbes
+items
+go east
+take gemme1
+go east
+go down
+take bouclier
+go west
+take gemme3
+take beamer
+charge beamer
+go down
+take gemme2
+fire beamer
 go south
 look
+go down
+look
+take socle
+items
 quit

@@ -1,5 +1,8 @@
-help
 look
+items
+take livre
+take epee
+items
 go east
 look
 quit

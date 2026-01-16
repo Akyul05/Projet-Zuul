@@ -1,62 +1,65 @@
-
 #départ
 help
 look
 items
 
-#recuperer objets du Village
+#Village 
 take livre
 take epee
 items
 
-# Forêt pour trouver les herbes
+# Forêt 
 go east
 look
 take herbes
-
-#utilisation Herbes
 eat herbes
 items
 
-# Ruines & Tour
+#  Ruines & Tour
 go east
 take gemme1
 go east
 look
 
-#verticalité
+# Plaine
 go down
 look
 take bouclier
 items
 
-#Temple & Caverne
+#Temple(Beamer)
 go west
 look
 take gemme3
+take beamer
+charge beamer
+items
+
+# Caverne (Trap Door)
 go down
 look
 take gemme2
-
-#Rivière
 go up
+back
+
+# Utilisation du Beamer
+fire beamer
+look
+
+# Rivière
 go north
 look
 take coffre
 items
 
-# Test back
-back
-look
-
-#fin du jeu (Sanctuaire & Forge)
+# Fin (Sanctuaire & Forge)
+go south
 go south
 look
 go down
 look
-
-take socle #normalement impossible
+take socle 
 items
 
-#Fin du test
+
 quit

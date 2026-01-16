@@ -2,6 +2,9 @@ import java.util.Stack;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *  This class is part of the "World of Zuul" application. 
@@ -21,6 +24,7 @@ public class GameEngine
     private Player aPlayer;
     private int aChrono;
     private int aTime = 50;
+    private HashMap<String , Room> aRooms;
     /**
      * Constructeur pour les objets de la classe GameEngine.
      * Crée le parseur et la carte du jeu.
@@ -28,6 +32,7 @@ public class GameEngine
     public GameEngine()
     {
         this.aParser = new Parser();
+        this.aRooms = new HashMap<String, Room>();
         this.createRooms();
         this.aChrono = 0;
     } // GameEngine()
@@ -56,23 +61,43 @@ public class GameEngine
         
         this.printLocationInfo();
     } // printWelcome()
-
+    /**
+     * Crée une piece etl'ajoute à la HashMap.
+     * @param pName Le nom de la piece
+     * @param pDescription La description de la piece
+     * @param pImage l'image
+     * @return La Room créé.
+     */
+    private Room createRoom(final String pName, final String pDescription, final String pImage)
+    {
+        Room vRoom = new Room(pDescription, pImage);
+        this.aRooms.put(pName, vRoom);
+        return vRoom;
+    }
     /**
      * Crée toutes les pièces et relie leurs sorties.
      */
     private void createRooms()
     {
         // Création des lieux avec des images (noms de fichiers temporaires)
-       Room vVillage = new Room("dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");
-        Room vForet = new Room("dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.png");
-        Room vRuines = new Room("aux Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");
-        Room vTour = new Room("devant une Tour Effondrée qui semble toucher les nuages.", "tour.png");
-        Room vRiviere = new Room("au bord de la Rivière des Ombres, l'eau est sombre et calme.", "riviere.png");
-        Room vCaverne = new Room("dans la Caverne de Cristal, les parois scintillent d'une lueur étrange.", "caverne.png");
-        Room vTemple = new Room("dans le Temple Oublié, un lieu sacré envahi par la végétation.", "temple.png");
-        Room vPlaine = new Room("sur la Plaine Stérile, un champ de bataille abandonné.", "pleines.png");
-        Room vSanctuaire = new Room("devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.png");
-        Room vForge = new Room("dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");
+       Room vVillage = this.createRoom("Village","dans les vestiges de votre village, un lieu pauvre mais abritant l'Érudit.", "village.png");
+        Room vForet = this.createRoom("Foret","dans la Forêt des Murmures, où l'on peut trouver quelques herbes médicinales.", "foret.png");
+        Room vRuines = this.createRoom("Ruines","aux Ruines Anciennes, un lieu de pierre brisée hanté par un Garde Spectral.", "ruines.png");
+        Room vTour = this.createRoom("Tour","devant une Tour Effondrée qui semble toucher les nuages.", "tour.png");
+        Room vRiviere = this.createRoom("Riviere","au bord de la Rivière des Ombres, l'eau est sombre et calme.", "riviere.png");
+        Room vCaverne = this.createRoom("Caverne","dans la Caverne de Cristal, les parois scintillent d'une lueur étrange.", "caverne.png");
+        Room vTemple = this.createRoom("Temple","dans le Temple Oublié, un lieu sacré envahi par la végétation.", "temple.png");
+        Room vPlaine = this.createRoom("Plaine","sur la Plaine Stérile, un champ de bataille abandonné.", "pleines.png");
+        Room vSanctuaire = this.createRoom("Sanctuaire","devant le Sanctuaire Scellé, une grande porte verrouillée qui réagit aux gemmes.", "sanctuaire.png");
+        Room vForge = this.createRoom("Forge","dans la Forge des Âmes, l'enceinte circulaire où repose le socle de l'épée brisée.", "forge.png");
+        
+        List<Room> vRooms = new ArrayList<Room>(this.aRooms.values());
+        RandomRoom vRandomizer = new RandomRoom(vRooms);
+        
+        TransporterRoom vCercleRunique = new TransporterRoom("au centre d'un cercle de pierres ancestrales gravées de runes pulsantes. L'air crépite d'une magie instable et le paysage semble changer à chaque clignement d'œil.","runes.png",vRandomizer);
+        this.aRooms.put("CercleRunique",vCercleRunique );
+        vVillage.setExit("north",vCercleRunique);
+        
         // Initialisation des sorties
         vVillage.setExit("east", vForet);
         

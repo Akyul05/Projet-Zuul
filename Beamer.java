@@ -22,7 +22,6 @@ public class Beamer extends Item
     }
     /**
      * Memorise la piece actuelle
-     * @return La pièce à mémoriser.
      */
     public void charge(final Room pRoom)
     {
@@ -30,7 +29,6 @@ public class Beamer extends Item
     }
     /**
      * Lance la teleportation vers la piece memorisée et se decharge ensuite .
-     * @return La pièce mémorisée .
      */
     public Room fire()
     {

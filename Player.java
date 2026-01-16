@@ -145,7 +145,11 @@ public class Player
             return pItem+ "n'est pas consommable.";
         }
     }
-    
+    /**
+     * Charge le beamer avec la pièce actuelle.
+     * @param pItem Nom de l'item à charger (Beamer).
+     * @return message de confirmation.
+     */
     public String charge(final String pItem)
     {
         Item vItem = this.aInventory.getItem(pItem);
@@ -161,7 +165,11 @@ public class Player
             return ("impossible de charger cet objet ");
         }
     }
-    public String fire(final String pItem)
+    /**
+     * Utilise le beamer pour se téléporter à la pièce mémorisée.
+     * @param pItem Nom de l'item à utiliser (Beamer).
+     * @return Un message de succès erreur.
+     */public String fire(final String pItem)
     {
         Item vItem = this.aInventory.getItem(pItem);
         if (vItem instanceof Beamer){
